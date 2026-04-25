@@ -2,109 +2,326 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>FINDU - Pro Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINDU - Dashboard Premium</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .main-content { padding: 2rem 5%; max-width: 1300px; margin: auto; }
-        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+        .main-content { padding: 2.5rem 5%; max-width: 1400px; margin: auto; }
+        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
         
-        /* Progress Bar Gamifikasi */
-        .level-bar { background: #E5E7EB; height: 8px; border-radius: 10px; margin: 10px 0; overflow: hidden; }
-        .level-fill { background: var(--gold); height: 100%; width: 45%; transition: 0.5s; }
+        /* Header Section */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2.5rem;
+            gap: 2rem;
+        }
 
-        /* Transaction Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { text-align: left; color: #6B7280; font-size: 0.85rem; padding-bottom: 10px; }
-        td { padding: 12px 0; border-top: 1px solid var(--gray); font-size: 0.9rem; }
-        
-        .shield-active { color: #10B981; display: flex; align-items: center; gap: 5px; font-weight: bold; }
-        
-        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        .header-left h1 {
+            font-size: 2.2rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .header-right {
+            text-align: right;
+            background: linear-gradient(135deg, rgba(6, 78, 59, 0.05), rgba(217, 119, 6, 0.05));
+            padding: 1.5rem 2rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(6, 78, 59, 0.1);
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            margin-top: 1rem;
+        }
+
+        .level-bar {
+            background: #E5E7EB;
+            height: 12px;
+            border-radius: 10px;
+            margin: 0.8rem 0;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            width: 250px;
+        }
+
+        .level-fill {
+            background: linear-gradient(90deg, var(--emerald), var(--gold));
+            height: 100%;
+            width: 45%;
+            transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .level-info {
+            font-size: 0.85rem;
+            color: var(--gray-dark);
+            margin-top: 0.5rem;
+        }
+
+        /* Balance Cards */
+        .balance-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255,255,255,0.5) 100%);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: var(--shadow-md);
+        }
+
+        .balance-card h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .balance-card .amount {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-top: 0.5rem;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .input-group input {
+            padding: 0.9rem 1.2rem;
+        }
+
+        /* Table Premium */
+        .table-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: var(--shadow-md);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        table thead {
+            background: linear-gradient(135deg, rgba(6,78,59,0.05), rgba(217,119,6,0.05));
+        }
+
+        table th {
+            text-align: left;
+            color: var(--gray-dark);
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 1rem;
+            border-bottom: 2px solid #E5E7EB;
+            letter-spacing: 0.5px;
+        }
+
+        table td {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        table tbody tr:hover {
+            background: rgba(6,78,59,0.03);
+        }
+
+        /* Right Column Cards */
+        .side-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 1.5rem;
+        }
+
+        .side-card h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .side-card.alert {
+            border-left: 4px solid var(--danger);
+            background: linear-gradient(135deg, rgba(239,68,68,0.05), rgba(239,68,68,0.02));
+        }
+
+        .alert-item {
+            font-size: 0.85rem;
+            padding: 0.8rem;
+            background: rgba(0,0,0,0.02);
+            border-radius: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .health-score {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .health-score .score {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--success), #06B6D4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0.5rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid { grid-template-columns: 1fr; }
+            .balance-section { grid-template-columns: 1fr; }
+            .input-group { grid-template-columns: 1fr; }
+            .header-section { flex-direction: column; align-items: flex-start; }
+            .header-right { text-align: left; width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 1.5rem; }
+            .input-group { grid-template-columns: 1fr; }
+            .header-right .level-bar { width: 100%; }
+        }
     </style>
 </head>
 <body id="app-body">
     <nav class="navbar">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div class="logo" style="color:white; font-size:1.5rem; margin:0;">FINDU</div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="logo" style="color: white; font-size: 1.5rem; margin: 0;">FINDU</div>
             <span class="badge badge-gold">PREMIUM</span>
         </div>
-        <div style="display:flex; gap:20px; align-items:center;">
-            <select id="curr" onchange="updateUI()" class="currency-select" style="background:transparent; color:white; border:1px solid white; border-radius:5px;">
+        <div style="display: flex; gap: 1.5rem; align-items: center;">
+            <select id="curr" onchange="updateUI()" class="currency-select">
                 <option value="IDR">IDR</option>
                 <option value="USD">USD</option>
                 <option value="SGD">SGD</option>
             </select>
-            <button onclick="toggleDark()" style="background:none; border:none; cursor:pointer;">🌙</button>
-            <button onclick="logout()" class="btn-main" style="padding:8px 15px; font-size:0.8rem;">Log Out</button>
+            <button onclick="toggleDark()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white; transition: var(--transition);">🌙</button>
+            <button onclick="logout()" class="btn-main" style="padding: 0.7rem 1.5rem; font-size: 0.85rem; width: auto;">Log Out</button>
         </div>
     </nav>
 
     <div class="main-content">
-        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px;">
-            <div>
-                <h1 style="margin:0;">Selamat Pagi, <span id="user-display" class="gold-text">User</span>!</h1>
-                <p id="shield-status" class="shield-active">🛡️ Anti-Fraud Shield: Aktif & Melindungi</p>
+        <!-- Header -->
+        <div class="header-section">
+            <div class="header-left">
+                <h1>Selamat Pagi, <span class="gold-text" id="user-display">User</span>! 👋</h1>
+                <div class="shield-active">🛡️ Anti-Fraud Shield: Aktif & Melindungi</div>
             </div>
-            <div style="text-align:right;">
-                <small>Level: <b>Financial Guardian</b></small>
-                <div class="level-bar" style="width:200px;"><div class="level-fill"></div></div>
-                <small>XP: 450/1000</small>
+            <div class="header-right">
+                <div style="font-weight: 600; margin-bottom: 0.5rem;">Level: <b>Financial Guardian</b></div>
+                <div class="level-bar" style="width: 100%;"><div class="level-fill"></div></div>
+                <div class="level-info">XP: <b id="xp-display">450</b>/1000</div>
             </div>
         </div>
 
+        <!-- Main Grid -->
         <div class="grid">
+            <!-- Left Column -->
             <div class="left-col">
-                <div class="card" style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:25px;">
-                    <div>
-                        <small>Total Saldo (Wallet)</small>
-                        <h1 id="wal-text" style="font-size:2.5rem; margin:10px 0;">Rp 0</h1>
+                <!-- Balance Cards -->
+                <div class="balance-section">
+                    <div class="balance-card">
+                        <h4>💰 Total Wallet</h4>
+                        <div class="amount" id="wal-text">Rp 0</div>
                     </div>
-                    <div style="border-left: 2px solid var(--gray); padding-left:20px;">
-                        <small>Dana Lumbung (Automated 30%)</small>
-                        <h2 id="save-text" class="gold-text">Rp 0</h2>
+                    <div class="balance-card" style="border-left: 4px solid var(--gold);">
+                        <h4>🏦 Dana Lumbung (30%)</h4>
+                        <div class="amount gold-text" id="save-text">Rp 0</div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <h3>➕ Catat Pendapatan Baru</h3>
-                    <div style="display:flex; gap:10px; margin-bottom:20px;">
-                        <input type="text" id="tx-name" placeholder="Sumber dana (misal: Gaji, Jual Barang)" style="flex:2;">
-                        <input type="number" id="tx-amt" placeholder="Nominal" style="flex:1;">
-                        <button onclick="processTx()" class="btn-main">Sweep Now</button>
+                <!-- Transaction Input -->
+                <div class="input-section">
+                    <h3 style="margin-top: 0;">➕ Catat Pendapatan Baru</h3>
+                    <div class="input-group">
+                        <input type="text" id="tx-name" placeholder="Sumber dana (misal: Gaji, Jual Barang)">
+                        <input type="number" id="tx-amt" placeholder="Nominal">
+                        <button onclick="processTx()" class="btn-main" style="width: auto; padding: 0.9rem 2rem;">Catat</button>
                     </div>
+                </div>
 
-                    <h3>📜 Riwayat Transaksi Terakhir</h3>
+                <!-- Transaction History -->
+                <div class="table-section">
+                    <h3 style="margin-top: 0;">📜 Riwayat Transaksi Terbaru</h3>
                     <table>
                         <thead>
-                            <tr><th>KETERANGAN</th><th>NOMINAL</th><th>STATUS SWEEP</th><th>WAKTU</th></tr>
+                            <tr>
+                                <th>KETERANGAN</th>
+                                <th>NOMINAL</th>
+                                <th>SIMPAN OTOMATIS</th>
+                                <th>WAKTU</th>
+                            </tr>
                         </thead>
                         <tbody id="tx-body">
-                            </tbody>
+                            <tr><td colspan="4" style="text-align: center; color: var(--gray-dark);">Belum ada transaksi</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Right Column -->
             <div class="right-col">
-                <div class="card" style="margin-bottom:25px; border: 1px solid #FCA5A5;">
-                    <h3 style="color:var(--danger); margin-top:0;">🛡️ Security Alert</h3>
-                    <div id="alert-list" style="font-size:0.85rem;">
-                        <p style="color:#666;">Belum ada ancaman terdeteksi hari ini.</p>
+                <!-- Security Alert -->
+                <div class="side-card alert">
+                    <h3 style="margin-top: 0; color: var(--danger);">🛡️ Security Alert</h3>
+                    <div id="alert-list">
+                        <div class="alert-item" style="color: var(--success); background: rgba(16,185,129,0.1);">
+                            ✓ Belum ada ancaman terdeteksi hari ini
+                        </div>
                     </div>
                 </div>
 
-                <div class="card" style="margin-bottom:25px;">
-                    <h3>💡 Tips Hari Ini</h3>
-                    <p style="font-size:0.9rem; color:#6B7280;" id="tips-box">Memuat tips finansial...</p>
-                    <button class="btn-main" style="width:100%; margin-top:10px; background:var(--gold);">Cek Modul Investasi</button>
+                <!-- Daily Tips -->
+                <div class="side-card">
+                    <h3 style="margin-top: 0;">💡 Tips Hari Ini</h3>
+                    <p style="font-size: 0.9rem; color: var(--gray-dark); margin-bottom: 1rem;" id="tips-box">Memuat tips finansial...</p>
+                    <button class="btn-main" style="width: 100%; padding: 0.8rem;">Modul Investasi</button>
                 </div>
-                
-                <div class="card">
-                    <h3>📊 Health Score</h3>
-                    <div style="text-align:center;">
-                        <h1 style="font-size:3rem; margin:10px 0; color:var(--emerald-light);">820</h1>
-                        <p class="badge badge-gold">EXCELLENT</p>
-                        <p style="font-size:0.8rem; margin-top:15px;">Anda berhak mendapatkan limit kredit modal usaha hingga 50 Juta.</p>
+
+                <!-- Health Score -->
+                <div class="side-card">
+                    <h3 style="margin-top: 0; text-align: center;">📊 Financial Health</h3>
+                    <div class="health-score">
+                        <div class="score" id="score-display">820</div>
+                        <span class="badge badge-success" style="margin-bottom: 1rem;">EXCELLENT</span>
+                        <p style="font-size: 0.85rem; color: var(--gray-dark);">
+                            Anda berhak mendapatkan limit kredit modal usaha hingga <b>50 Juta</b>.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -112,7 +329,8 @@
     </div>
 
     <script>
-        let wallet = 0; let saved = 0;
+        let wallet = 0;
+        let saved = 0;
         const rates = { IDR: 1, USD: 0.000062, SGD: 0.000085 };
         const symbols = { IDR: 'Rp', USD: '$', SGD: 'S$' };
         
@@ -120,20 +338,31 @@
             "Pisahkan 30% pendapatan untuk modal agar bisnis tidak mandek.",
             "Hindari cicilan konsumtif yang lebih dari 10% pendapatan.",
             "Gunakan fitur Anti-Debt Shield untuk memblokir notifikasi tawaran Pinjol.",
-            "Credit Score Anda naik jika rutin mencatat transaksi mingguan."
+            "Financial Health Score Anda naik jika rutin mencatat transaksi mingguan."
         ];
 
         window.onload = () => {
-            document.getElementById('user-display').innerText = localStorage.getItem('findu_user') || 'Pengusaha Muda';
+            // Cek session
+            const session = localStorage.getItem('currentUser');
+            if (!session) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            const userData = JSON.parse(session);
+            document.getElementById('user-display').innerText = userData.fullname;
             document.getElementById('tips-box').innerText = tips[Math.floor(Math.random() * tips.length)];
             updateUI();
         };
 
         function processTx() {
-            const name = document.getElementById('tx-name').value;
+            const name = document.getElementById('tx-name').value.trim();
             const amt = parseFloat(document.getElementById('tx-amt').value) || 0;
 
-            if(amt <= 0 || name === "") return alert("Masukkan data yang valid!");
+            if (amt <= 0 || name === "") {
+                alert("❌ Masukkan data yang valid!");
+                return;
+            }
 
             const sweepAmt = amt * 0.3;
             const netAmt = amt - sweepAmt;
@@ -141,18 +370,28 @@
             wallet += netAmt;
             saved += sweepAmt;
 
-            // Tambah ke tabel
+            // Add to table
             const row = `<tr>
                 <td><b>${name}</b></td>
                 <td>Rp ${amt.toLocaleString()}</td>
-                <td style="color:var(--gold)">+Rp ${sweepAmt.toLocaleString()}</td>
-                <td style="color:#999; font-size:0.7rem;">${new Date().toLocaleTimeString()}</td>
+                <td style="color: var(--gold); font-weight: 600;">+Rp ${sweepAmt.toLocaleString()}</td>
+                <td style="color: var(--gray-dark); font-size: 0.85rem;">${new Date().toLocaleTimeString('id-ID')}</td>
             </tr>`;
-            document.getElementById('tx-body').innerHTML = row + document.getElementById('tx-body').innerHTML;
+            
+            const txBody = document.getElementById('tx-body');
+            if (txBody.innerHTML.includes('Belum ada transaksi')) {
+                txBody.innerHTML = row;
+            } else {
+                txBody.innerHTML = row + txBody.innerHTML;
+            }
 
-            // Simulasi Anti-Fraud (jika nominal terlalu besar/aneh)
-            if(amt > 10000000) {
-                document.getElementById('alert-list').innerHTML = `<p style="color:var(--danger)">⚠️ <b>Aktivitas Tidak Biasa:</b> Pendapatan besar terdeteksi. Sistem mengamankan data transaksi.</p>`;
+            // Fraud detection
+            if (amt > 10000000) {
+                document.getElementById('alert-list').innerHTML = `
+                    <div class="alert-item" style="color: var(--danger); background: rgba(239,68,68,0.1);">
+                        ⚠️ <b>Aktivitas Tidak Biasa:</b> Pendapatan besar terdeteksi. Sistem mengamankan data.
+                    </div>
+                `;
             }
 
             updateUI();
@@ -169,24 +408,14 @@
             document.getElementById('save-text').innerText = sym + " " + (saved * rate).toLocaleString(undefined, {maximumFractionDigits: 2});
         }
 
-        function toggleDark() { document.getElementById('app-body').classList.toggle('dark-mode'); }
-        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-    window.onload = () => {
-    // Ambil data user yang sedang login
-    const session = localStorage.getItem('currentUser');
-    if (!session) {
-        // Jika tidak ada session (belum login), tendang balik ke login
-        window.location.href = 'index.html';
-    } else {
-        const userData = JSON.parse(session);
-        document.getElementById('user-display').innerText = userData.fullname;
-    }
-    
-    document.getElementById('tips-box').innerText = tips[Math.floor(Math.random() * tips.length)];
-    updateUI();
-};
+        function toggleDark() {
+            document.getElementById('app-body').classList.toggle('dark-mode');
+        }
 
-function logout() {
-    localStorage.removeItem('currentUser'); // Hapus session saja, data di findu_db tetap ada
-    window.location.href = 'index.html';
-}
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

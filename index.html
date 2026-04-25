@@ -2,30 +2,40 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>FINDU - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINDU - Login Premium</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="toast" class="notification"></div>
 
     <div class="container">
         <div class="logo">FINDU</div>
-        <p style="color: var(--emerald-light);">Silakan masuk ke akun Anda</p>
+        <p style="color: var(--gray-dark); font-size: 1.05rem; margin-bottom: 2rem;">Masuk ke Dashboard Finansial Anda</p>
 
         <form onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label>Email / Username</label>
-                <input type="text" id="login-user" required placeholder="Username anda">
+                <input type="text" id="login-user" required placeholder="Masukkan username Anda">
             </div>
             <div class="form-group">
                 <label>Kata Sandi</label>
                 <input type="password" id="login-pass" required placeholder="••••••••">
             </div>
-            <button type="submit" class="btn-main">MASUK</button>
+            <button type="submit" class="btn-main">MASUK SEKARANG</button>
         </form>
 
-        <div style="margin-top:20px; font-size:0.9rem;">
-            Belum punya akun? <a href="register.html" style="color:var(--gold); font-weight:bold; text-decoration:none;">Daftar Sekarang</a>
+        <div style="margin-top: 2rem; font-size: 0.95rem; color: var(--gray-dark);">
+            Belum punya akun? 
+            <a href="register.html" style="color: var(--emerald); font-weight: 700;">Daftar Gratis</a>
+        </div>
+
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #E5E7EB;">
+            <p style="font-size: 0.85rem; color: var(--gray-dark); margin-bottom: 0.5rem;">Demo Akun:</p>
+            <code style="background: #F3F4F6; padding: 0.5rem 1rem; border-radius: 0.6rem; font-size: 0.8rem; color: var(--text-main);">
+                Username: test | Password: 123456
+            </code>
         </div>
     </div>
 
@@ -36,9 +46,19 @@
             const pass = document.getElementById('login-pass').value;
             const toast = document.getElementById('toast');
 
-            // Ambil data user dari "database" localStorage
-            const storedData = localStorage.getItem('findu_db');
-            const users = storedData ? JSON.parse(storedData) : [];
+            // Create default test user if not exists
+            let storedData = localStorage.getItem('findu_db');
+            let users = storedData ? JSON.parse(storedData) : [];
+            
+            // Add default test user if empty
+            if (users.length === 0) {
+                users.push({
+                    fullname: 'User Test',
+                    username: 'test',
+                    password: '123456'
+                });
+                localStorage.setItem('findu_db', JSON.stringify(users));
+            }
 
             // Cari apakah user dan pass cocok
             const validUser = users.find(u => u.username === user && u.password === pass);
@@ -46,17 +66,17 @@
             if (validUser) {
                 // Simpan sesi login aktif
                 localStorage.setItem('currentUser', JSON.stringify(validUser));
-                toast.innerText = "Berhasil Masuk! Mengalihkan...";
+                toast.innerText = "✓ Login Berhasil! Mengalihkan...";
                 toast.style.display = 'block';
-                toast.style.background = "var(--emerald)";
+                toast.style.background = "linear-gradient(135deg, #059669 0%, #10B981 100%)";
                 
                 setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
             } else {
                 // Jika tidak ditemukan atau salah
-                toast.innerText = "Akun tidak ditemukan atau sandi salah. Silakan daftar dulu!";
+                toast.innerText = "✕ Username atau password salah. Coba lagi atau daftar.";
                 toast.style.display = 'block';
-                toast.style.background = "#991B1B"; // Warna merah peringatan
-                setTimeout(() => { toast.style.display = 'none'; }, 3000);
+                toast.style.background = "linear-gradient(135deg, #DC2626 0%, #EF4444 100%)";
+                setTimeout(() => { toast.style.display = 'none'; }, 3500);
             }
         }
     </script>

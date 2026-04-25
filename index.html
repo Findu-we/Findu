@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>FINDU - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="toast" class="notification"></div>
+    <div class="container">
+        <div class="logo">FINDU</div>
+        <p style="color: var(--emerald-light);">Future Financial Protection</p>
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>Email / Username</label>
+                <input type="text" id="user" required placeholder="Username anda">
+            </div>
+            <div class="form-group">
+                <label>Kata Sandi</label>
+                <input type="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn-main">MASUK</button>
+        </form>
+        <div style="margin-top:20px; font-size:0.9rem;">
+            Belum punya akun? <a href="register.html" style="color:var(--gold); font-weight:bold; text-decoration:none;">Daftar</a>
+        </div>
+    </div>
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            localStorage.setItem('findu_user', document.getElementById('user').value);
+            const t = document.getElementById('toast');
+            t.innerText = "Berhasil Masuk!"; t.style.display = 'block';
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+        }
+    </script>
+</body>
+</html>

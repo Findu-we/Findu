@@ -101,6 +101,8 @@ body {
     z-index: 100;
     box-shadow: var(--shadow-md);
     backdrop-filter: blur(10px);
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .navbar .logo {
@@ -114,6 +116,7 @@ body {
     display: flex;
     gap: 1rem;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 /* Main Content */
@@ -130,17 +133,6 @@ body {
     grid-template-columns: 1fr;
     gap: 2rem;
     margin-top: 2rem;
-}
-
-@media (min-width: 768px) {
-    .navbar .logo { font-size: 1.8rem; }
-    .grid { grid-template-columns: repeat(2, 1fr); }
-    .main-content { padding: 2.5rem 5%; }
-}
-
-@media (min-width: 1024px) {
-    .grid { grid-template-columns: 2fr 1fr; }
-    .card-large { grid-column: span 1; }
 }
 
 /* Premium Card Styles */
@@ -310,14 +302,6 @@ input::placeholder {
     animation: slideInRight 0.4s ease-out;
     border-left: 4px solid rgba(255, 255, 255, 0.3);
     color: white;
-}
-
-@media (max-width: 640px) {
-    .notification {
-        right: 15px;
-        left: 15px;
-        max-width: none;
-    }
 }
 
 /* Table Styles Premium */
@@ -496,21 +480,282 @@ a:hover {
     color: var(--gold);
 }
 
-/* Responsive Text */
-@media (max-width: 768px) {
+/* ========== RESPONSIVE DESIGN IMPROVEMENTS ========== */
+
+/* Small devices (Mobile: 320px - 480px) */
+@media (max-width: 480px) {
+    .container {
+        padding: 1.5rem 1rem;
+        margin: 3vh auto;
+        width: 95%;
+        border-radius: 1.5rem;
+    }
+
+    .logo {
+        font-size: 2rem;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    input, select, textarea {
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+    }
+
+    .btn-main {
+        padding: 0.85rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.3rem;
+    }
+
+    h3 {
+        font-size: 0.95rem;
+    }
+
+    .notification {
+        right: 10px;
+        left: 10px;
+        top: 15px;
+        max-width: none;
+        padding: 1rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Medium devices (Tablet: 481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
     .container {
         padding: 2rem 1.5rem;
-        margin: 10vh auto;
+        margin: 5vh auto;
+        width: 92%;
     }
-    
-    h1 { font-size: 1.5rem; }
-    h3 { font-size: 1rem; }
-    
-    .card {
-        padding: 1.5rem;
+
+    .logo {
+        font-size: 2.2rem;
     }
-    
+
+    .navbar {
+        padding: 1rem 3%;
+    }
+
+    .navbar .logo {
+        font-size: 1.3rem;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    h3 {
+        font-size: 1.05rem;
+    }
+
     .main-content {
-        padding: 1.5rem;
+        padding: 1.5rem 3%;
+    }
+
+    .notification {
+        right: 15px;
+        left: 15px;
+        max-width: none;
+    }
+
+    /* Dashboard Grid untuk Tablet */
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .balance-section {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .input-group {
+        grid-template-columns: 1fr !important;
+    }
+
+    table {
+        font-size: 0.85rem;
+    }
+
+    table th, table td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+/* Large devices (Desktop: 769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 2.5rem 2rem;
+        max-width: 500px;
+    }
+
+    .navbar .logo {
+        font-size: 1.6rem;
+    }
+
+    .navbar > div:last-child {
+        gap: 1.2rem;
+    }
+
+    .main-content {
+        padding: 2rem 5%;
+    }
+
+    .grid {
+        grid-template-columns: 1.5fr 1fr;
+    }
+
+    .balance-section {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .input-group {
+        grid-template-columns: 1.5fr 1fr auto !important;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+/* Extra large devices (Desktop: 1025px+) */
+@media (min-width: 1025px) {
+    .navbar .logo {
+        font-size: 1.5rem;
+    }
+
+    .grid {
+        grid-template-columns: 2fr 1fr;
+    }
+
+    .main-content {
+        padding: 2.5rem 5%;
+    }
+
+    .balance-section {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .input-group {
+        grid-template-columns: 2fr 1fr auto !important;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+/* Fix untuk input group pada dashboard */
+@media (max-width: 768px) {
+    .input-group {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 0.8rem !important;
+        align-items: stretch !important;
+    }
+
+    .input-group input {
+        padding: 0.85rem 1rem !important;
+    }
+
+    .input-group button {
+        padding: 0.85rem 1.5rem !important;
+    }
+}
+
+/* Fix untuk header section responsif */
+@media (max-width: 768px) {
+    .header-section {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1.5rem !important;
+    }
+
+    .header-right {
+        width: 100% !important;
+        text-align: left !important;
+    }
+
+    .header-right .level-bar {
+        width: 100% !important;
+    }
+}
+
+/* Fix untuk balance cards */
+@media (max-width: 640px) {
+    .balance-section {
+        grid-template-columns: 1fr !important;
+    }
+
+    .balance-card .amount {
+        font-size: 1.8rem !important;
+    }
+}
+
+/* Fix untuk table responsif */
+@media (max-width: 640px) {
+    .table-section {
+        padding: 1.2rem !important;
+    }
+
+    table {
+        font-size: 0.8rem !important;
+    }
+
+    table th, table td {
+        padding: 0.6rem !important;
+    }
+
+    table h3 {
+        font-size: 0.95rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+}
+
+/* Fix untuk side cards */
+@media (max-width: 768px) {
+    .side-card {
+        padding: 1.2rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .side-card h3 {
+        font-size: 1rem !important;
+        margin-bottom: 0.8rem !important;
+    }
+
+    .health-score .score {
+        font-size: 2.8rem !important;
+    }
+}
+
+/* Landscape mode optimization */
+@media (max-height: 600px) and (orientation: landscape) {
+    .container {
+        margin: 2vh auto;
+        padding: 1.5rem 2rem;
+    }
+
+    .main-content {
+        padding: 1.5rem 3%;
+    }
+
+    h1 {
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+    }
+
+    h3 {
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
     }
 }

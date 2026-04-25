@@ -171,6 +171,22 @@
 
         function toggleDark() { document.getElementById('app-body').classList.toggle('dark-mode'); }
         function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-    </script>
-</body>
-</html>
+    window.onload = () => {
+    // Ambil data user yang sedang login
+    const session = localStorage.getItem('currentUser');
+    if (!session) {
+        // Jika tidak ada session (belum login), tendang balik ke login
+        window.location.href = 'index.html';
+    } else {
+        const userData = JSON.parse(session);
+        document.getElementById('user-display').innerText = userData.fullname;
+    }
+    
+    document.getElementById('tips-box').innerText = tips[Math.floor(Math.random() * tips.length)];
+    updateUI();
+};
+
+function logout() {
+    localStorage.removeItem('currentUser'); // Hapus session saja, data di findu_db tetap ada
+    window.location.href = 'index.html';
+}

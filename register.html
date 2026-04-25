@@ -2,34 +2,45 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>FINDU - Daftar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINDU - Registrasi Premium</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="toast" class="notification"></div>
 
     <div class="container">
         <div class="logo">FINDU</div>
-        <p style="color: var(--emerald-light);">Buat akun baru Anda</p>
+        <p style="color: var(--gray-dark); font-size: 1.05rem; margin-bottom: 2rem;">Buat Akun Keuangan Cerdas Anda</p>
 
         <form onsubmit="handleRegister(event)">
             <div class="form-group">
                 <label>Nama Lengkap</label>
-                <input type="text" id="reg-fullname" required placeholder="Nama asli anda">
+                <input type="text" id="reg-fullname" required placeholder="Masukkan nama asli Anda">
             </div>
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" id="reg-user" required placeholder="Untuk login">
+                <input type="text" id="reg-user" required placeholder="Username untuk login Anda">
             </div>
             <div class="form-group">
                 <label>Kata Sandi</label>
                 <input type="password" id="reg-pass" required placeholder="Minimal 6 karakter">
             </div>
-            <button type="submit" class="btn-main">DAFTAR & SIMPAN</button>
+            <button type="submit" class="btn-main">BUAT AKUN GRATIS</button>
         </form>
 
-        <div style="margin-top:20px; font-size:0.9rem;">
-            Sudah punya akun? <a href="index.html" style="color:var(--gold); font-weight:bold; text-decoration:none;">Masuk di sini</a>
+        <div style="margin-top: 2rem; font-size: 0.95rem; color: var(--gray-dark);">
+            Sudah punya akun? 
+            <a href="index.html" style="color: var(--emerald); font-weight: 700;">Login di sini</a>
+        </div>
+
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #E5E7EB;">
+            <p style="font-size: 0.8rem; color: var(--gray-dark);">
+                ✓ Pendaftaran gratis selamanya<br>
+                ✓ Keamanan data terjamin<br>
+                ✓ Fitur lengkap untuk mengelola keuangan
+            </p>
         </div>
     </div>
 
@@ -41,6 +52,15 @@
             const pass = document.getElementById('reg-pass').value;
             const toast = document.getElementById('toast');
 
+            // Validasi panjang password
+            if (pass.length < 6) {
+                toast.innerText = "✕ Password minimal 6 karakter";
+                toast.style.display = 'block';
+                toast.style.background = "linear-gradient(135deg, #DC2626 0%, #EF4444 100%)";
+                setTimeout(() => { toast.style.display = 'none'; }, 3000);
+                return;
+            }
+
             // Ambil database lama atau buat baru jika kosong
             const storedData = localStorage.getItem('findu_db');
             let users = storedData ? JSON.parse(storedData) : [];
@@ -49,10 +69,10 @@
             const isExist = users.some(u => u.username === user);
 
             if (isExist) {
-                toast.innerText = "Username sudah terdaftar!";
+                toast.innerText = "✕ Username sudah terdaftar. Pilih username lain.";
                 toast.style.display = 'block';
-                toast.style.background = "#D97706";
-                setTimeout(() => { toast.style.display = 'none'; }, 2000);
+                toast.style.background = "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)";
+                setTimeout(() => { toast.style.display = 'none'; }, 3000);
             } else {
                 // Simpan user baru ke array
                 users.push({
@@ -64,9 +84,9 @@
                 // Masukkan kembali ke localStorage
                 localStorage.setItem('findu_db', JSON.stringify(users));
 
-                toast.innerText = "Pendaftaran Berhasil! Mengalihkan ke Login...";
+                toast.innerText = "✓ Registrasi Berhasil! Mengalihkan ke login...";
                 toast.style.display = 'block';
-                toast.style.background = "var(--emerald)";
+                toast.style.background = "linear-gradient(135deg, #059669 0%, #10B981 100%)";
 
                 setTimeout(() => { window.location.href = 'index.html'; }, 2000);
             }

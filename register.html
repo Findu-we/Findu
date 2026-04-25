@@ -7,37 +7,69 @@
 </head>
 <body>
     <div id="toast" class="notification"></div>
+
     <div class="container">
         <div class="logo">FINDU</div>
+        <p style="color: var(--emerald-light);">Buat akun baru Anda</p>
+
         <form onsubmit="handleRegister(event)">
             <div class="form-group">
                 <label>Nama Lengkap</label>
-                <input type="text" id="reg-name" required>
+                <input type="text" id="reg-fullname" required placeholder="Nama asli anda">
             </div>
             <div class="form-group">
-                <label>Daftar Sebagai</label>
-                <select id="reg-role">
-                    <option value="Pelajar">Pelajar</option>
-                    <option value="UMKM">Pemilik UMKM</option>
-                </select>
+                <label>Username</label>
+                <input type="text" id="reg-user" required placeholder="Untuk login">
             </div>
             <div class="form-group">
                 <label>Kata Sandi</label>
-                <input type="password" required>
+                <input type="password" id="reg-pass" required placeholder="Minimal 6 karakter">
             </div>
-            <button type="submit" class="btn-main">DAFTAR SEKARANG</button>
+            <button type="submit" class="btn-main">DAFTAR & SIMPAN</button>
         </form>
+
         <div style="margin-top:20px; font-size:0.9rem;">
-            Sudah akun? <a href="index.html" style="color:var(--gold); font-weight:bold; text-decoration:none;">Masuk</a>
+            Sudah punya akun? <a href="index.html" style="color:var(--gold); font-weight:bold; text-decoration:none;">Masuk di sini</a>
         </div>
     </div>
+
     <script>
         function handleRegister(e) {
             e.preventDefault();
-            localStorage.setItem('findu_user', document.getElementById('reg-name').value);
-            const t = document.getElementById('toast');
-            t.innerText = "Pendaftaran Berhasil!"; t.style.display = 'block';
-            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+            const fullname = document.getElementById('reg-fullname').value;
+            const user = document.getElementById('reg-user').value;
+            const pass = document.getElementById('reg-pass').value;
+            const toast = document.getElementById('toast');
+
+            // Ambil database lama atau buat baru jika kosong
+            const storedData = localStorage.getItem('findu_db');
+            let users = storedData ? JSON.parse(storedData) : [];
+
+            // Cek apakah username sudah dipakai
+            const isExist = users.some(u => u.username === user);
+
+            if (isExist) {
+                toast.innerText = "Username sudah terdaftar!";
+                toast.style.display = 'block';
+                toast.style.background = "#D97706";
+                setTimeout(() => { toast.style.display = 'none'; }, 2000);
+            } else {
+                // Simpan user baru ke array
+                users.push({
+                    fullname: fullname,
+                    username: user,
+                    password: pass
+                });
+
+                // Masukkan kembali ke localStorage
+                localStorage.setItem('findu_db', JSON.stringify(users));
+
+                toast.innerText = "Pendaftaran Berhasil! Mengalihkan ke Login...";
+                toast.style.display = 'block';
+                toast.style.background = "var(--emerald)";
+
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+            }
         }
     </script>
 </body>

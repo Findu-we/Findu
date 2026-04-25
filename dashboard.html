@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>FINDU - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .main-content { padding: 2rem 5%; max-width: 1200px; margin: auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .gold-text { color: var(--gold); font-weight: bold; }
+        .premium-lock { position: relative; filter: blur(2px); opacity: 0.5; pointer-events: none; }
+        .premium-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--gold); color: white; padding: 10px; border-radius: 20px; cursor: pointer; z-index: 10; font-weight: bold; border: none; }
+    </style>
+</head>
+<body id="body-tag">
+    <nav class="navbar">
+        <div class="logo" style="color: white; margin: 0;">FINDU</div>
+        <div style="display:flex; gap:15px; align-items:center;">
+            <select id="curr" onchange="convert()" style="width: auto; padding: 5px;">
+                <option value="IDR">IDR</option>
+                <option value="USD">USD</option>
+                <option value="JPY">JPY</option>
+            </select>
+            <button onclick="toggleDark()" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌙</button>
+            <button onclick="logout()" style="background:var(--gold); border:none; padding:5px 10px; border-radius:5px; color:white; cursor:pointer;">Keluar</button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <h1>Selamat Datang, <span id="user-display" class="gold-text">User</span>!</h1>
+        
+        <div class="grid">
+            <div class="card" style="grid-column: span 1;">
+                <h3>➕ Transaksi Baru</h3>
+                <input type="number" id="amt" placeholder="Nominal Rp" style="margin-bottom:10px;">
+                <button onclick="addTx()" class="btn-main">Tambah & Sweep</button>
+            </div>
+
+            <div class="card">
+                <h3>💰 Saldo & Lumbung</h3>
+                <p>Dompet: <span id="wal" class="gold-text">Rp 0</span></p>
+                <p>Lumbung (30%): <span id="save" class="gold-text">Rp 0</span></p>
+            </div>
+
+            <div class="card" style="position:relative;">
+                <button id="p-btn" class="premium-btn" onclick="upgrade()">UPGRADE PREMIUM</button>
+                <div id="p-content" class="premium-lock">
+                    <h3>📈 Investasi Pro</h3>
+                    <p>• Rekomendasi Saham<br>• Analisis Pasar Real-time</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let wallet = 0; let saved = 0;
+        const rates = { IDR: 1, USD: 0.000062, JPY: 0.0097 };
+
+        window.onload = () => {
+            document.getElementById('user-display').innerText = localStorage.getItem('findu_user') || 'User';
+        };
+
+        function addTx() {
+            let val = parseFloat(document.getElementById('amt').value) || 0;
+            if(val > 0) {
+                saved += val * 0.3;
+                wallet += val * 0.7;
+                convert();
+                document.getElementById('amt').value = '';
+            }
+        }
+
+        function convert() {
+            let c = document.getElementById('curr').value;
+            document.getElementById('wal').innerText = (c === 'IDR' ? 'Rp ' : c + ' ') + (wallet * rates[c]).toLocaleString();
+            document.getElementById('save').innerText = (c === 'IDR' ? 'Rp ' : c + ' ') + (saved * rates[c]).toLocaleString();
+        }
+
+        function toggleDark() { document.getElementById('body-tag').classList.toggle('dark-mode'); }
+        
+        function upgrade() {
+            if(confirm("Buka fitur Premium seharga Rp 49rb?")) {
+                document.getElementById('p-content').classList.remove('premium-lock');
+                document.getElementById('p-btn').style.display = 'none';
+            }
+        }
+
+        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+    </script>
+</body>
+</html>

@@ -1,77 +1,155 @@
 :root {
     --emerald: #064E3B;
-    --emerald-light: #065F46;
+    --emerald-light: #059669;
     --gold: #D97706;
     --white: #FFFFFF;
     --gray: #F3F4F6;
-    --bg-body: #F3F4F6;
+    --bg-body: #F9FAFB;
     --card-bg: #FFFFFF;
-    --text-main: #333333;
+    --text-main: #1F2937;
+    --danger: #EF4444;
 }
 
-/* Dark Mode Variable Overrides */
 body.dark-mode {
-    --bg-body: #111827;
-    --card-bg: #1F2937;
-    --text-main: #F3F4F6;
-    --gray: #374151;
+    --bg-body: #0F172A;
+    --card-bg: #1E293B;
+    --text-main: #F8FAFC;
+    --gray: #334155;
 }
 
+/* Base Settings */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', sans-serif;
     background-color: var(--bg-body);
     color: var(--text-main);
     margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+    line-height: 1.6;
+}
+
+/* --- RESPONSIVE LAYOUT SYSTEM --- */
+
+/* Container untuk Login & Register */
+.container {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 90%; /* Lebar fleksibel untuk HP */
+    max-width: 400px; /* Batas maksimal untuk Laptop */
+    text-align: center;
+    margin: 10vh auto; /* Menengah secara vertikal */
+}
+
+/* Navbar Adaptive */
+.navbar {
+    background: var(--emerald);
+    padding: 0.8rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar .logo {
+    font-size: 1.2rem; /* Ukuran default mobile */
+    color: white;
+}
+
+/* Content Area */
+.main-content {
+    padding: 1.5rem;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Grid System yang Berubah Sesuai Device */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Default: 1 kolom (HP) */
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+/* --- MEDIA QUERIES (BREAKPOINTS) --- */
+
+/* Tablet Mode (Lebar layar > 768px) */
+@media (min-width: 768px) {
+    .navbar .logo { font-size: 1.8rem; }
+    
+    .grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 Kolom untuk Tablet */
+    }
+    
+    .main-content { padding: 2rem 5%; }
+}
+
+/* Laptop/Desktop Mode (Lebar layar > 1024px) */
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: 2fr 1fr; /* Layout 2:1 untuk Dashboard Profesional */
+    }
+    
+    .card-large { grid-column: span 1; }
+}
+
+/* --- COMPONENT STYLES --- */
+
+.card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* Form Elements Adaptive */
+input, select {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 0.5rem;
+    border-radius: 0.8rem;
+    border: 1px solid #ddd;
+    box-sizing: border-box; /* Agar padding tidak merusak lebar */
+    font-size: 1rem; /* Mencegah auto-zoom di iPhone */
+}
+
+.btn-main {
+    width: 100%;
+    padding: 0.9rem;
+    border-radius: 0.8rem;
+    background: var(--emerald);
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
     transition: 0.3s;
 }
 
-/* Layout Container (Login/Reg) */
-.container {
-    background: var(--card-bg);
-    padding: 2.5rem;
-    border-radius: 1.5rem;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    width: 90%;
-    max-width: 380px;
-    text-align: center;
-    margin: 80px auto;
+/* Tabel Adaptive (Bisa di-scroll di HP) */
+.table-container {
+    overflow-x: auto;
+    width: 100%;
 }
 
-.logo {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: var(--emerald);
-    letter-spacing: 2px;
+table {
+    width: 100%;
+    min-width: 500px; /* Memaksa scroll horizontal jika di HP sangat kecil */
+    border-collapse: collapse;
 }
 
-/* Forms */
-.form-group { text-align: left; margin-bottom: 15px; }
-label { display: block; color: var(--emerald); font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
-input, select { 
-    width: 100%; padding: 12px; border: 1px solid #ddd; 
-    border-radius: 12px; box-sizing: border-box; outline: none;
-    background: var(--white); color: #333;
-}
-
-/* Buttons */
-.btn-main {
-    width: 100%; background: var(--emerald); color: white;
-    padding: 14px; border: none; border-radius: 12px;
-    font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s;
-}
-.btn-main:hover { background: var(--emerald-light); transform: translateY(-2px); }
-
-/* Notifications */
+/* Notification Adaptive */
 .notification {
-    position: fixed; top: 20px; right: 20px; background: var(--emerald);
-    color: white; padding: 15px 25px; border-radius: 10px;
-    display: none; z-index: 1000; border-left: 5px solid var(--gold);
-    animation: slideIn 0.5s ease-out;
-}
-@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-
-/* Navbar */
-.navbar {
-    background: var(--emerald); color: white; padding: 1rem 5%;
-    display: flex; justify-content: space-between; align-items: center;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    left: 10px; /* Full width di HP */
+    max-width: 350px; /* Tetap kecil di Laptop */
+    margin-left: auto;
+    padding: 1rem;
+    z-index: 1000;
+    border-radius: 10px;
 }

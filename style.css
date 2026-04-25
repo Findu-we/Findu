@@ -1,0 +1,77 @@
+:root {
+    --emerald: #064E3B;
+    --emerald-light: #065F46;
+    --gold: #D97706;
+    --white: #FFFFFF;
+    --gray: #F3F4F6;
+    --bg-body: #F3F4F6;
+    --card-bg: #FFFFFF;
+    --text-main: #333333;
+}
+
+/* Dark Mode Variable Overrides */
+body.dark-mode {
+    --bg-body: #111827;
+    --card-bg: #1F2937;
+    --text-main: #F3F4F6;
+    --gray: #374151;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    margin: 0;
+    transition: 0.3s;
+}
+
+/* Layout Container (Login/Reg) */
+.container {
+    background: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 380px;
+    text-align: center;
+    margin: 80px auto;
+}
+
+.logo {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--emerald);
+    letter-spacing: 2px;
+}
+
+/* Forms */
+.form-group { text-align: left; margin-bottom: 15px; }
+label { display: block; color: var(--emerald); font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
+input, select { 
+    width: 100%; padding: 12px; border: 1px solid #ddd; 
+    border-radius: 12px; box-sizing: border-box; outline: none;
+    background: var(--white); color: #333;
+}
+
+/* Buttons */
+.btn-main {
+    width: 100%; background: var(--emerald); color: white;
+    padding: 14px; border: none; border-radius: 12px;
+    font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s;
+}
+.btn-main:hover { background: var(--emerald-light); transform: translateY(-2px); }
+
+/* Notifications */
+.notification {
+    position: fixed; top: 20px; right: 20px; background: var(--emerald);
+    color: white; padding: 15px 25px; border-radius: 10px;
+    display: none; z-index: 1000; border-left: 5px solid var(--gold);
+    animation: slideIn 0.5s ease-out;
+}
+@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+/* Navbar */
+.navbar {
+    background: var(--emerald); color: white; padding: 1rem 5%;
+    display: flex; justify-content: space-between; align-items: center;
+}

@@ -7,31 +7,57 @@
 </head>
 <body>
     <div id="toast" class="notification"></div>
+
     <div class="container">
         <div class="logo">FINDU</div>
-        <p style="color: var(--emerald-light);">Future Financial Protection</p>
+        <p style="color: var(--emerald-light);">Silakan masuk ke akun Anda</p>
+
         <form onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label>Email / Username</label>
-                <input type="text" id="user" required placeholder="Username anda">
+                <input type="text" id="login-user" required placeholder="Username anda">
             </div>
             <div class="form-group">
                 <label>Kata Sandi</label>
-                <input type="password" required placeholder="••••••••">
+                <input type="password" id="login-pass" required placeholder="••••••••">
             </div>
             <button type="submit" class="btn-main">MASUK</button>
         </form>
+
         <div style="margin-top:20px; font-size:0.9rem;">
-            Belum punya akun? <a href="register.html" style="color:var(--gold); font-weight:bold; text-decoration:none;">Daftar</a>
+            Belum punya akun? <a href="register.html" style="color:var(--gold); font-weight:bold; text-decoration:none;">Daftar Sekarang</a>
         </div>
     </div>
+
     <script>
         function handleLogin(e) {
             e.preventDefault();
-            localStorage.setItem('findu_user', document.getElementById('user').value);
-            const t = document.getElementById('toast');
-            t.innerText = "Berhasil Masuk!"; t.style.display = 'block';
-            setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+            const user = document.getElementById('login-user').value;
+            const pass = document.getElementById('login-pass').value;
+            const toast = document.getElementById('toast');
+
+            // Ambil data user dari "database" localStorage
+            const storedData = localStorage.getItem('findu_db');
+            const users = storedData ? JSON.parse(storedData) : [];
+
+            // Cari apakah user dan pass cocok
+            const validUser = users.find(u => u.username === user && u.password === pass);
+
+            if (validUser) {
+                // Simpan sesi login aktif
+                localStorage.setItem('currentUser', JSON.stringify(validUser));
+                toast.innerText = "Berhasil Masuk! Mengalihkan...";
+                toast.style.display = 'block';
+                toast.style.background = "var(--emerald)";
+                
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+            } else {
+                // Jika tidak ditemukan atau salah
+                toast.innerText = "Akun tidak ditemukan atau sandi salah. Silakan daftar dulu!";
+                toast.style.display = 'block';
+                toast.style.background = "#991B1B"; // Warna merah peringatan
+                setTimeout(() => { toast.style.display = 'none'; }, 3000);
+            }
         }
     </script>
 </body>

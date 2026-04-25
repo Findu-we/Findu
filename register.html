@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>FINDU - Daftar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="toast" class="notification"></div>
+    <div class="container">
+        <div class="logo">FINDU</div>
+        <form onsubmit="handleRegister(event)">
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="reg-name" required>
+            </div>
+            <div class="form-group">
+                <label>Daftar Sebagai</label>
+                <select id="reg-role">
+                    <option value="Pelajar">Pelajar</option>
+                    <option value="UMKM">Pemilik UMKM</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Kata Sandi</label>
+                <input type="password" required>
+            </div>
+            <button type="submit" class="btn-main">DAFTAR SEKARANG</button>
+        </form>
+        <div style="margin-top:20px; font-size:0.9rem;">
+            Sudah akun? <a href="index.html" style="color:var(--gold); font-weight:bold; text-decoration:none;">Masuk</a>
+        </div>
+    </div>
+    <script>
+        function handleRegister(e) {
+            e.preventDefault();
+            localStorage.setItem('findu_user', document.getElementById('reg-name').value);
+            const t = document.getElementById('toast');
+            t.innerText = "Pendaftaran Berhasil!"; t.style.display = 'block';
+            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+        }
+    </script>
+</body>
+</html>

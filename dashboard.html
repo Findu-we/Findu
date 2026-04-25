@@ -63,7 +63,7 @@
         /* Balance Cards */
         .balance-section {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -95,6 +95,45 @@
             margin-top: 0.5rem;
         }
 
+        .balance-card.expense .amount {
+            background: linear-gradient(135deg, var(--danger), #EF4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Transaction Type Tabs */
+        .tx-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #E5E7EB;
+            padding-bottom: 0;
+        }
+
+        .tx-tab {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray-dark);
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            font-size: 0.95rem;
+        }
+
+        .tx-tab.active {
+            color: var(--emerald);
+            border-bottom-color: var(--emerald);
+        }
+
+        .tx-tab.expense.active {
+            color: var(--danger);
+            border-bottom-color: var(--danger);
+        }
+
         /* Input Section */
         .input-section {
             background: var(--card-bg);
@@ -113,6 +152,10 @@
         }
 
         .input-group input {
+            padding: 0.9rem 1.2rem;
+        }
+
+        .input-group select {
             padding: 0.9rem 1.2rem;
         }
 
@@ -156,6 +199,25 @@
 
         table tbody tr:hover {
             background: rgba(6,78,59,0.03);
+        }
+
+        .tx-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .tx-badge.income {
+            background: rgba(16,185,129,0.15);
+            color: var(--success);
+        }
+
+        .tx-badge.expense {
+            background: rgba(239,68,68,0.15);
+            color: var(--danger);
         }
 
         /* Right Column Cards */
@@ -228,6 +290,9 @@
             table th, table td { padding: 0.7rem; }
             table th { font-size: 0.75rem; }
             table td { font-size: 0.8rem; }
+            .balance-section { grid-template-columns: 1fr 1fr !important; }
+            .tx-tabs { gap: 0.5rem; }
+            .tx-tab { padding: 0.8rem 1rem; font-size: 0.85rem; }
         }
 
         @media (max-width: 480px) {
@@ -239,14 +304,14 @@
             .header-right { padding: 0.8rem 1rem; font-size: 0.85rem; }
             .level-bar { height: 10px; margin: 0.5rem 0; }
             .level-info { font-size: 0.75rem; }
-            .balance-section { gap: 1rem; margin-bottom: 1.5rem; }
+            .balance-section { gap: 1rem; margin-bottom: 1.5rem; grid-template-columns: 1fr !important; }
             .balance-card { padding: 1.2rem; margin-bottom: 0; }
             .balance-card h4 { font-size: 0.75rem; margin-bottom: 0.3rem; }
             .balance-card .amount { font-size: 1.4rem; margin-top: 0.3rem; }
             .input-section { padding: 1rem; margin-bottom: 1.5rem; }
             .input-section h3 { font-size: 1rem; margin-bottom: 0.8rem; }
-            .input-group { gap: 0.6rem; }
-            .input-group input, .input-group button { padding: 0.75rem 0.8rem !important; }
+            .input-group { gap: 0.6rem; grid-template-columns: 1fr !important; }
+            .input-group input, .input-group button, .input-group select { padding: 0.75rem 0.8rem !important; }
             .btn-main { padding: 0.75rem 1rem; font-size: 0.9rem; }
             .table-section { padding: 1rem; }
             .table-section h3 { font-size: 1rem; margin-bottom: 0.8rem; }
@@ -258,6 +323,8 @@
             .alert-item { font-size: 0.75rem; padding: 0.6rem; }
             .health-score { padding: 0.5rem; }
             .health-score .score { font-size: 2.2rem; margin: 0.3rem 0; }
+            .tx-tabs { gap: 0.3rem; padding-bottom: 0; }
+            .tx-tab { padding: 0.7rem 0.8rem; font-size: 0.8rem; margin-bottom: -2px; }
         }
 
         /* Landscape Mode */
@@ -316,16 +383,24 @@
                         <div class="amount" id="wal-text">Rp 0</div>
                     </div>
                     <div class="balance-card" style="border-left: 4px solid var(--gold);">
-                        <h4>🏦 Dana Lumbung (30%)</h4>
-                        <div class="amount gold-text" id="save-text">Rp 0</div>
+                        <h4>📈 Total Pemasukan</h4>
+                        <div class="amount" id="income-text">Rp 0</div>
+                    </div>
+                    <div class="balance-card expense" style="border-left: 4px solid var(--danger);">
+                        <h4>📉 Total Pengeluaran</h4>
+                        <div class="amount" id="expense-text">Rp 0</div>
                     </div>
                 </div>
 
                 <!-- Transaction Input -->
                 <div class="input-section">
-                    <h3 style="margin-top: 0;">➕ Catat Pendapatan Baru</h3>
+                    <h3 style="margin-top: 0;">➕ Catat Transaksi Baru</h3>
+                    <div class="tx-tabs">
+                        <button class="tx-tab active" onclick="switchTab('income')">📥 Pemasukan</button>
+                        <button class="tx-tab expense" onclick="switchTab('expense')">📤 Pengeluaran</button>
+                    </div>
                     <div class="input-group">
-                        <input type="text" id="tx-name" placeholder="Sumber dana (misal: Gaji, Jual Barang)">
+                        <input type="text" id="tx-name" placeholder="Deskripsi (misal: Gaji, Belanja)">
                         <input type="number" id="tx-amt" placeholder="Nominal">
                         <button onclick="processTx()" class="btn-main" style="width: auto; padding: 0.9rem 2rem;">Catat</button>
                     </div>
@@ -337,9 +412,9 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>TIPE</th>
                                 <th>KETERANGAN</th>
                                 <th>NOMINAL</th>
-                                <th>SIMPAN OTOMATIS</th>
                                 <th>WAKTU</th>
                             </tr>
                         </thead>
@@ -386,15 +461,18 @@
 
     <script>
         let wallet = 0;
-        let saved = 0;
+        let totalIncome = 0;
+        let totalExpense = 0;
+        let currentTxType = 'income';
         const rates = { IDR: 1, USD: 0.000062, SGD: 0.000085 };
         const symbols = { IDR: 'Rp', USD: '$', SGD: 'S$' };
         
         const tips = [
-            "Pisahkan 30% pendapatan untuk modal agar bisnis tidak mandek.",
-            "Hindari cicilan konsumtif yang lebih dari 10% pendapatan.",
+            "Pisahkan pendapatan untuk tabungan agar bisnis tidak mandek.",
+            "Hindari pengeluaran konsumtif yang lebih dari 30% pendapatan.",
             "Gunakan fitur Anti-Debt Shield untuk memblokir notifikasi tawaran Pinjol.",
-            "Financial Health Score Anda naik jika rutin mencatat transaksi mingguan."
+            "Financial Health Score Anda naik jika rutin mencatat transaksi mingguan.",
+            "Catat setiap transaksi untuk mendapatkan gambaran finansial yang lebih baik."
         ];
 
         window.onload = () => {
@@ -411,6 +489,26 @@
             updateUI();
         };
 
+        function switchTab(type) {
+            currentTxType = type;
+            
+            // Update active tab styling
+            const tabs = document.querySelectorAll('.tx-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            if (type === 'income') {
+                tabs[0].classList.add('active');
+                document.getElementById('tx-name').placeholder = "Sumber dana (misal: Gaji, Bonus, Penjualan)";
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('tx-name').placeholder = "Pengeluaran (misal: Belanja, Makan, Transportasi)";
+            }
+            
+            // Clear input
+            document.getElementById('tx-name').value = "";
+            document.getElementById('tx-amt').value = "";
+        }
+
         function processTx() {
             const name = document.getElementById('tx-name').value.trim();
             const amt = parseFloat(document.getElementById('tx-amt').value) || 0;
@@ -420,34 +518,60 @@
                 return;
             }
 
-            const sweepAmt = amt * 0.3;
-            const netAmt = amt - sweepAmt;
+            if (currentTxType === 'income') {
+                wallet += amt;
+                totalIncome += amt;
+                
+                // Add to table
+                const row = `<tr>
+                    <td><span class="tx-badge income">PEMASUKAN</span></td>
+                    <td><b>${name}</b></td>
+                    <td style="color: var(--success); font-weight: 600;">+Rp ${amt.toLocaleString()}</td>
+                    <td style="color: var(--gray-dark); font-size: 0.85rem;">${new Date().toLocaleTimeString('id-ID')}</td>
+                </tr>`;
+                
+                const txBody = document.getElementById('tx-body');
+                if (txBody.innerHTML.includes('Belum ada transaksi')) {
+                    txBody.innerHTML = row;
+                } else {
+                    txBody.innerHTML = row + txBody.innerHTML;
+                }
 
-            wallet += netAmt;
-            saved += sweepAmt;
+                // Fraud detection
+                if (amt > 10000000) {
+                    document.getElementById('alert-list').innerHTML = `
+                        <div class="alert-item" style="color: var(--danger); background: rgba(239,68,68,0.1);">
+                            ⚠️ <b>Aktivitas Tidak Biasa:</b> Pemasukan besar terdeteksi. Sistem mengamankan data.
+                        </div>
+                    `;
+                }
+            } else if (currentTxType === 'expense') {
+                wallet -= amt;
+                totalExpense += amt;
+                
+                // Add to table
+                const row = `<tr>
+                    <td><span class="tx-badge expense">PENGELUARAN</span></td>
+                    <td><b>${name}</b></td>
+                    <td style="color: var(--danger); font-weight: 600;">-Rp ${amt.toLocaleString()}</td>
+                    <td style="color: var(--gray-dark); font-size: 0.85rem;">${new Date().toLocaleTimeString('id-ID')}</td>
+                </tr>`;
+                
+                const txBody = document.getElementById('tx-body');
+                if (txBody.innerHTML.includes('Belum ada transaksi')) {
+                    txBody.innerHTML = row;
+                } else {
+                    txBody.innerHTML = row + txBody.innerHTML;
+                }
 
-            // Add to table
-            const row = `<tr>
-                <td><b>${name}</b></td>
-                <td>Rp ${amt.toLocaleString()}</td>
-                <td style="color: var(--gold); font-weight: 600;">+Rp ${sweepAmt.toLocaleString()}</td>
-                <td style="color: var(--gray-dark); font-size: 0.85rem;">${new Date().toLocaleTimeString('id-ID')}</td>
-            </tr>`;
-            
-            const txBody = document.getElementById('tx-body');
-            if (txBody.innerHTML.includes('Belum ada transaksi')) {
-                txBody.innerHTML = row;
-            } else {
-                txBody.innerHTML = row + txBody.innerHTML;
-            }
-
-            // Fraud detection
-            if (amt > 10000000) {
-                document.getElementById('alert-list').innerHTML = `
-                    <div class="alert-item" style="color: var(--danger); background: rgba(239,68,68,0.1);">
-                        ⚠️ <b>Aktivitas Tidak Biasa:</b> Pendapatan besar terdeteksi. Sistem mengamankan data.
-                    </div>
-                `;
+                // Warning if expense too high
+                if (amt > 5000000) {
+                    document.getElementById('alert-list').innerHTML = `
+                        <div class="alert-item" style="color: var(--danger); background: rgba(239,68,68,0.1);">
+                            ⚠️ <b>Pengeluaran Besar:</b> Pengeluaran Rp ${amt.toLocaleString()} dicatat. Pantau saldo Anda.
+                        </div>
+                    `;
+                }
             }
 
             updateUI();
@@ -460,8 +584,12 @@
             const rate = rates[c];
             const sym = symbols[c];
 
+            // Ensure wallet doesn't go negative
+            if (wallet < 0) wallet = 0;
+
             document.getElementById('wal-text').innerText = sym + " " + (wallet * rate).toLocaleString(undefined, {maximumFractionDigits: 2});
-            document.getElementById('save-text').innerText = sym + " " + (saved * rate).toLocaleString(undefined, {maximumFractionDigits: 2});
+            document.getElementById('income-text').innerText = sym + " " + (totalIncome * rate).toLocaleString(undefined, {maximumFractionDigits: 2});
+            document.getElementById('expense-text').innerText = sym + " " + (totalExpense * rate).toLocaleString(undefined, {maximumFractionDigits: 2});
         }
 
         function toggleDark() {

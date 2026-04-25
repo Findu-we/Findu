@@ -202,29 +202,85 @@
             margin: 0.5rem 0;
         }
 
-        /* Responsive */
+        /* Responsive Improvements */
         @media (max-width: 1024px) {
             .grid { grid-template-columns: 1fr; }
             .balance-section { grid-template-columns: 1fr; }
             .input-group { grid-template-columns: 1fr; }
             .header-section { flex-direction: column; align-items: flex-start; }
             .header-right { text-align: left; width: 100%; }
+            .main-content { padding: 1.5rem 3%; }
         }
 
         @media (max-width: 768px) {
-            .main-content { padding: 1.5rem; }
-            .input-group { grid-template-columns: 1fr; }
-            .header-right .level-bar { width: 100%; }
+            .main-content { padding: 1rem 2%; }
+            .header-left h1 { font-size: 1.5rem; }
+            .header-right { padding: 1rem 1.5rem; }
+            .level-bar { width: 100%; }
+            .balance-card { padding: 1.5rem; }
+            .balance-card h4 { font-size: 0.8rem; }
+            .balance-card .amount { font-size: 1.6rem; }
+            .input-section { padding: 1.5rem; }
+            .table-section { padding: 1.5rem; }
+            .side-card { padding: 1.2rem; }
+            .side-card h3 { font-size: 1rem; }
+            .health-score .score { font-size: 2.5rem; }
+            table th, table td { padding: 0.7rem; }
+            table th { font-size: 0.75rem; }
+            table td { font-size: 0.8rem; }
+        }
+
+        @media (max-width: 480px) {
+            .main-content { padding: 0.8rem 1%; }
+            .header-section { gap: 1rem; margin-bottom: 1.5rem; }
+            .header-left h1 { font-size: 1.2rem; }
+            .header-left h1 { margin-bottom: 0.3rem; }
+            .shield-active { font-size: 0.85rem; }
+            .header-right { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .level-bar { height: 10px; margin: 0.5rem 0; }
+            .level-info { font-size: 0.75rem; }
+            .balance-section { gap: 1rem; margin-bottom: 1.5rem; }
+            .balance-card { padding: 1.2rem; margin-bottom: 0; }
+            .balance-card h4 { font-size: 0.75rem; margin-bottom: 0.3rem; }
+            .balance-card .amount { font-size: 1.4rem; margin-top: 0.3rem; }
+            .input-section { padding: 1rem; margin-bottom: 1.5rem; }
+            .input-section h3 { font-size: 1rem; margin-bottom: 0.8rem; }
+            .input-group { gap: 0.6rem; }
+            .input-group input, .input-group button { padding: 0.75rem 0.8rem !important; }
+            .btn-main { padding: 0.75rem 1rem; font-size: 0.9rem; }
+            .table-section { padding: 1rem; }
+            .table-section h3 { font-size: 1rem; margin-bottom: 0.8rem; }
+            table th { padding: 0.6rem 0.4rem; font-size: 0.7rem; }
+            table td { padding: 0.6rem 0.4rem; font-size: 0.75rem; }
+            .side-card { padding: 1rem; margin-bottom: 1rem; }
+            .side-card h3 { font-size: 0.95rem; margin-bottom: 0.8rem; }
+            .side-card p { font-size: 0.8rem; }
+            .alert-item { font-size: 0.75rem; padding: 0.6rem; }
+            .health-score { padding: 0.5rem; }
+            .health-score .score { font-size: 2.2rem; margin: 0.3rem 0; }
+        }
+
+        /* Landscape Mode */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .main-content { padding: 1rem 3%; }
+            .header-section { margin-bottom: 1rem; gap: 1rem; }
+            .header-left h1 { font-size: 1.3rem; margin-bottom: 0.2rem; }
+            .balance-section { margin-bottom: 1rem; gap: 1rem; }
+            .balance-card { padding: 1rem; }
+            .input-section { padding: 1rem; margin-bottom: 1rem; }
+            .input-group input { padding: 0.7rem 1rem; }
+            .table-section { padding: 1rem; }
+            table th, table td { padding: 0.5rem; }
         }
     </style>
 </head>
 <body id="app-body">
     <nav class="navbar">
-        <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
             <div class="logo" style="color: white; font-size: 1.5rem; margin: 0;">FINDU</div>
             <span class="badge badge-gold">PREMIUM</span>
         </div>
-        <div style="display: flex; gap: 1.5rem; align-items: center;">
+        <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
             <select id="curr" onchange="updateUI()" class="currency-select">
                 <option value="IDR">IDR</option>
                 <option value="USD">USD</option>

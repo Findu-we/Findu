@@ -114,3 +114,39 @@ function executeTransaction(name, amt) {
     document.getElementById('tx-name').value = "";
     document.getElementById('tx-amt').value = "";
 }
+// Tambahkan mata uang CNY di objek rates dan symbols
+const rates = { IDR: 1, USD: 0.000064, CNY: 0.00046 };
+const symbols = { IDR: 'Rp', USD: '$', CNY: '¥' };
+
+// Fungsi untuk update Rekomendasi Investasi otomatis
+function updateInvestLiteracy() {
+    const investDiv = document.getElementById('invest-recom');
+    let html = "";
+
+    if (wallet <= 0) {
+        html = `<div style="grid-column: span 2; color: var(--danger);">⚠️ Saldo kosong. Prioritaskan mencari pemasukan tambahan.</div>`;
+    } else if (wallet < 1000000) {
+        html = `
+            <div class="card" style="padding:10px; font-size:0.8rem; border:1px solid #cbd5e1;">
+                <b>Dana Darurat</b><br>Kumpulkan hingga Rp 3jt sebelum investasi.
+            </div>
+            <div class="card" style="padding:10px; font-size:0.8rem; border:1px solid #cbd5e1;">
+                <b>Edukasi</b><br>Beli buku keuangan untuk naikkan skill.
+            </div>`;
+    } else {
+        html = `
+            <div class="card" style="padding:10px; font-size:0.8rem; border:1px solid #10b981;">
+                <b>Reksadana Pasar Uang</b><br>Risiko rendah, cocok untuk pemula.
+            </div>
+            <div class="card" style="padding:10px; font-size:0.8rem; border:1px solid #3b82f6;">
+                <b>SBN / Obligasi</b><br>Aman dijamin negara, bunga stabil.
+            </div>`;
+    }
+    investDiv.innerHTML = html;
+}
+
+// Jangan lupa panggil updateInvestLiteracy() di dalam updateUI()
+function updateUI() {
+    // ... kode update UI yang lama ...
+    updateInvestLiteracy(); // Panggil fitur literasi
+}

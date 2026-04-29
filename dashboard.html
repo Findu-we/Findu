@@ -22,7 +22,6 @@
         body { background: #f1f5f9; color: var(--text-main); min-height: 100vh; transition: 0.3s; }
         body.dark-mode { background: var(--dark-bg); color: #f1f5f9; }
 
-        /* Navbar */
         nav {
             background: var(--emerald-dark);
             padding: 1rem 5%;
@@ -38,7 +37,6 @@
         .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
         .badge-premium { background: var(--gold); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
 
-        /* Main Layout */
         .container { padding: 2rem 5%; max-width: 1400px; margin: auto; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
 
         .card { 
@@ -54,14 +52,13 @@
 
         .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
         .level-bar { background: #e2e8f0; height: 10px; border-radius: 10px; width: 200px; margin-top: 5px; overflow: hidden; }
-        .level-fill { background: var(--gold); height: 100%; width: 45%; transition: 0.5s; }
+        .level-fill { background: var(--gold); height: 100%; width: 0%; transition: 0.5s; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
         .stat-card { padding: 1.5rem; border-radius: 1.2rem; color: white; }
         .bg-wallet { background: linear-gradient(135deg, #10b981, #059669); }
         .bg-income { background: linear-gradient(135deg, #3b82f6, #2563eb); }
         .bg-expense { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .stat-card h4 { font-size: 0.8rem; opacity: 0.9; text-transform: uppercase; }
         .stat-card .amount { font-size: 1.5rem; font-weight: 800; margin-top: 0.5rem; }
 
         .ai-bubble { font-style: italic; color: #64748b; padding: 1rem; border-radius: 1rem; background: #f8fafc; border-left: 4px solid var(--emerald); margin-top: 10px; }
@@ -89,20 +86,10 @@
             z-index: 1000; backdrop-filter: blur(8px);
         }
         .buffer-content {
-            background: var(--card-bg); padding: 2.5rem; border-radius: 2rem;
+            background: white; padding: 2.5rem; border-radius: 2rem;
             text-align: center; max-width: 400px; border: 2px solid var(--gold);
         }
         .timer-circle { font-size: 3rem; font-weight: 800; color: var(--gold); margin: 1rem 0; }
-
-        /* Shake Animation */
-        .shake { animation: shake 0.2s ease-in-out 0s 2; }
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
 
         @media (max-width: 900px) {
             .container { grid-template-columns: 1fr; }
@@ -114,10 +101,10 @@
 
 <div id="impulse-overlay">
     <div class="buffer-content">
-        <h2 style="color:var(--text-main)">🤔 Tunggu Sebentar...</h2>
-        <p style="color:#64748b; margin-top:10px;">Kamu sedang ingin mengeluarkan uang dalam jumlah besar. Apakah ini benar-benar perlu?</p>
+        <h2 style="color:#1e293b">🤔 Tunggu Sebentar...</h2>
+        <p style="color:#64748b; margin-top:10px;">Kamu ingin mengeluarkan uang cukup besar. Apakah ini benar-benar perlu?</p>
         <div class="timer-circle" id="buffer-timer">5</div>
-        <p><small>"Kesenjangan antara keinginan dan kebutuhan seringkali hanya sejauh 5 detik berpikir."</small></p>
+        <p><small>"Berhenti sejenak bisa menyelamatkan tabunganmu."</small></p>
     </div>
 </div>
 
@@ -133,6 +120,7 @@
             <option value="CNY">CNY (¥)</option>
         </select>
         <button onclick="toggleDark()" style="background:rgba(255,255,255,0.2); padding:5px 10px;">🌙 Mode</button>
+        <button onclick="resetData()" style="background:var(--danger); padding:5px 10px;">🗑️ Reset</button>
     </div>
 </nav>
 
@@ -141,27 +129,27 @@
         <div class="header-section">
             <div>
                 <h1>Halo, <span id="user-display" style="color:var(--gold)">User</span>! 👋</h1>
-                <p style="font-size: 0.9rem; opacity: 0.8;">🛡️ Anti-Fraud Shield Aktif</p>
+                <p style="font-size: 0.9rem; opacity: 0.8;">🛡️ Anti-Fraud & Auto-Save Aktif</p>
             </div>
             <div style="text-align: right;">
                 <span style="font-weight: 700; font-size: 0.8rem;">Level: Financial Guardian</span>
                 <div class="level-bar"><div class="level-fill" id="xp-bar"></div></div>
-                <small>XP: <span id="xp-text">450</span>/1000</small>
+                <small>XP: <span id="xp-text">0</span>/1000</small>
             </div>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card bg-wallet">
                 <h4>Saldo Saat Ini</h4>
-                <div class="amount" id="wal-text">Rp 0</div>
+                <div class="amount" id="wal-text">0</div>
             </div>
             <div class="stat-card bg-income">
-                <h4>Pemasukan</h4>
-                <div class="amount" id="income-text">Rp 0</div>
+                <h4>Total Pemasukan</h4>
+                <div class="amount" id="income-text">0</div>
             </div>
             <div class="stat-card bg-expense">
-                <h4>Pengeluaran</h4>
-                <div class="amount" id="expense-text">Rp 0</div>
+                <h4>Total Pengeluaran</h4>
+                <div class="amount" id="expense-text">0</div>
             </div>
         </div>
 
@@ -179,7 +167,7 @@
         </div>
 
         <div class="card">
-            <h3>📜 Riwayat Transaksi</h3>
+            <h3>📜 Riwayat Transaksi (Tersimpan)</h3>
             <table id="tx-table">
                 <thead>
                     <tr>
@@ -196,36 +184,28 @@
     </div>
 
     <div class="right-col">
-        <div class="card" id="ai-card-wrapper">
+        <div class="card">
             <h3 style="display:flex; align-items:center; gap:8px;">🤖 AI Mentor: <span id="ai-status">Normal</span></h3>
             <div id="ai-mood-emoji" style="font-size: 3rem; margin: 10px 0;">😐</div>
             <div class="ai-bubble" id="ai-response">
-                "Halo! Aku FINDU AI. Masukkan transaksi untuk mendengar pendapatku."
+                "Halo! Aku FINDU AI. Datamu tersimpan aman di browser ini."
             </div>
-        </div>
-
-        <div class="card" style="border-top: 5px solid var(--gold);">
-            <h3>🦋 Butterfly Simulator</h3>
-            <p style="font-size:0.8rem; margin:10px 0;">Analisis efek belanja mewah terhadap masa depanmu:</p>
-            <input type="text" id="sim-name" placeholder="Barang (Misal: PS5)" style="margin-bottom:10px;">
-            <input type="number" id="sim-amt" placeholder="Harga" style="margin-bottom:10px;">
-            <button onclick="runSimulation()" style="width:100%; background:var(--gold)">Cek Masa Depan</button>
-            <div id="sim-result" style="margin-top:15px; display:none; font-size:0.85rem; border-top:1px solid #ddd; padding-top:10px;"></div>
         </div>
 
         <div class="card">
             <h3>📊 Health Score</h3>
-            <div id="health-score-val" style="font-size: 2.5rem; font-weight: 800; color: var(--emerald); text-align: center; margin: 10px 0;">820</div>
-            <p id="health-desc" style="font-size: 0.8rem; text-align: center; opacity: 0.8;">Kondisi keuangan Anda Sangat Baik.</p>
+            <div id="health-score-val" style="font-size: 2.5rem; font-weight: 800; color: var(--emerald); text-align: center; margin: 10px 0;">100</div>
+            <p style="font-size: 0.8rem; text-align: center; opacity: 0.8;">Skor dihitung berdasarkan rasio tabunganmu.</p>
         </div>
     </div>
 </div>
 
 <script>
+    // --- STATE MANAGEMENT ---
     let wallet = 0;
     let totalIncome = 0;
     let totalExpense = 0;
-    let xp = 450;
+    let xp = 0;
     let mode = 'income';
     let transactions = [];
     let isBufferActive = false;
@@ -233,81 +213,53 @@
     const rates = { IDR: 1, USD: 0.000064, CNY: 0.00046 };
     const symbols = { IDR: 'Rp', USD: '$', CNY: '¥' };
 
+    // --- INITIALIZATION (LOAD FROM STORAGE) ---
     window.onload = () => {
+        const savedData = localStorage.getItem('findu_data');
+        if (savedData) {
+            const data = JSON.parse(savedData);
+            wallet = data.wallet || 0;
+            totalIncome = data.totalIncome || 0;
+            totalExpense = data.totalExpense || 0;
+            xp = data.xp || 0;
+            transactions = data.transactions || [];
+        }
+
         const session = localStorage.getItem('currentUser');
         if (session) {
-            const userData = JSON.parse(session);
-            document.getElementById('user-display').innerText = userData.fullname || "User";
+            document.getElementById('user-display').innerText = JSON.parse(session).fullname || "User";
         }
+        
         updateUI();
     };
 
+    // --- PERSISTENCE ---
+    function saveToLocal() {
+        const data = { wallet, totalIncome, totalExpense, xp, transactions };
+        localStorage.setItem('findu_data', JSON.stringify(data));
+    }
+
+    function resetData() {
+        if(confirm("Hapus semua data permanen?")) {
+            localStorage.removeItem('findu_data');
+            location.reload();
+        }
+    }
+
+    // --- LOGIC ---
     function setMode(m) {
         mode = m;
         document.getElementById('btn-in').style.background = m === 'income' ? 'var(--emerald)' : '#64748b';
         document.getElementById('btn-out').style.background = m === 'expense' ? 'var(--danger)' : '#64748b';
     }
 
-    function getAiFeedback(type, name, amt) {
-        const res = document.getElementById('ai-response');
-        const moodEmoji = document.getElementById('ai-mood-emoji');
-        const aiStatus = document.getElementById('ai-status');
-        const aiCard = document.getElementById('ai-card-wrapper');
-        
-        let msg = "";
-        let mood = "😐";
-        let status = "Stabil";
-        aiCard.classList.remove('shake');
-
-        const lowName = name.toLowerCase();
-
-        if (type === 'income') {
-            status = "Senang";
-            mood = "🤑";
-            if (amt > 5000000) {
-                msg = `WIDIH! Rp ${amt.toLocaleString()}? Kamu resmi jadi pahlawan finansial hari ini. Jangan lupa sedekah dan tabung 30%-nya!`;
-                mood = "👑";
-            } else {
-                msg = "Pemasukan masuk radar! Dompetmu tersenyum sekarang.";
-            }
-        } else {
-            const expenseRatio = wallet > 0 ? amt / wallet : 0;
-
-            if (lowName.includes('kopi') || lowName.includes('starbucks')) {
-                status = "Sarkas";
-                mood = "☕";
-                msg = "Lagi-lagi kopi? Ingat, tumpukan struk kopi hari ini bisa jadi tiket liburan di masa depan. Tapi ya sudahlah...";
-            } else if (expenseRatio > 0.5 && wallet > 0) {
-                status = "PANIK";
-                mood = "😱";
-                msg = "STOP! Kamu mengeluarkan lebih dari SETENGAH saldomu hanya untuk satu hal? Ini bahaya, bos!";
-                aiCard.classList.add('shake');
-            } else if (amt > 1000000) {
-                status = "Tegas";
-                mood = "🧐";
-                msg = `Rp ${amt.toLocaleString()} melayang... Pastikan barang '${name}' ini tidak berakhir jadi pajangan berdebu dalam dua minggu.`;
-            } else if (wallet < 500000 && wallet > 0) {
-                status = "Khawatir";
-                mood = "📉";
-                msg = "Saldo kritis! Kamu harus mulai mode hemat ekstrem atau kita bakal makan promag akhir bulan.";
-            } else {
-                status = "Disiplin";
-                mood = "👍";
-                msg = "Pengeluaran tercatat. Masih dalam batas wajar, tapi tetap awasi pengeluaran berikutnya.";
-            }
-        }
-
-        res.innerHTML = `"${msg}"`;
-        moodEmoji.innerText = mood;
-        aiStatus.innerText = status;
-    }
-
     function processTx() {
         const name = document.getElementById('tx-name').value.trim();
         const amt = parseFloat(document.getElementById('tx-amt').value) || 0;
 
-        if (!name || amt <= 0) return alert("Data tidak valid!");
+        if (!name || amt <= 0) return alert("Input tidak valid!");
 
+        // Anti-Impulse: Jika belanja > 500rb
         if (mode === 'expense' && amt >= 500000 && !isBufferActive) {
             activateBuffer(name, amt);
             return;
@@ -323,29 +275,33 @@
         let timeLeft = 5;
 
         overlay.style.display = 'flex';
-        
         const countdown = setInterval(() => {
             timeLeft--;
             timerText.innerText = timeLeft;
             if (timeLeft <= 0) {
                 clearInterval(countdown);
                 overlay.style.display = 'none';
-                if (confirm(`Setelah berpikir 5 detik, apakah kamu tetap ingin membeli ${name}?`)) {
-                    executeTransaction(name, amt);
-                }
+                if (confirm(`Masih ingin membeli ${name}?`)) executeTransaction(name, amt);
                 isBufferActive = false;
+                timerText.innerText = "5";
             }
         }, 1000);
     }
 
     function executeTransaction(name, amt) {
-        const tx = { name, amt, mode, time: new Date().toLocaleTimeString('id-ID') };
+        const tx = { 
+            name, 
+            amt, 
+            mode, 
+            time: new Date().toLocaleString('id-ID', {hour:'2-digit', minute:'2-digit'}) 
+        };
+        
         transactions.unshift(tx);
 
         if (mode === 'income') {
             wallet += amt;
             totalIncome += amt;
-            xp += 20; 
+            xp += 20;
         } else {
             wallet -= amt;
             totalExpense += amt;
@@ -353,6 +309,7 @@
         }
 
         updateUI();
+        saveToLocal(); // Simpan setiap ada perubahan
         getAiFeedback(mode, name, amt);
         
         document.getElementById('tx-name').value = "";
@@ -369,35 +326,40 @@
         document.getElementById('expense-text').innerText = `${s} ${(totalExpense * r).toLocaleString()}`;
         
         document.getElementById('xp-text').innerText = xp;
-        document.getElementById('xp-bar').style.width = (xp / 1000 * 100) + "%";
+        document.getElementById('xp-bar').style.width = Math.min((xp / 1000 * 100), 100) + "%";
 
         const body = document.getElementById('tx-body');
-        body.innerHTML = transactions.map(t => `
-            <tr>
-                <td><b>${t.name}</b><br><small style="color:${t.mode === 'income' ? 'var(--emerald)' : 'var(--danger)'}">${t.mode.toUpperCase()}</small></td>
-                <td style="color:${t.mode === 'income' ? 'var(--emerald)' : 'var(--danger)'}; font-weight:700">
-                    ${t.mode === 'income' ? '+' : '-'} ${s} ${(t.amt * r).toLocaleString()}
-                </td>
-                <td><small>${t.time}</small></td>
-            </tr>
-        `).join('') || '<tr><td colspan="3" style="text-align:center">Belum ada data</td></tr>';
+        if (transactions.length === 0) {
+            body.innerHTML = '<tr><td colspan="3" style="text-align:center">Belum ada data</td></tr>';
+        } else {
+            body.innerHTML = transactions.map(t => `
+                <tr>
+                    <td><b>${t.name}</b><br><small style="color:${t.mode === 'income' ? 'var(--emerald)' : 'var(--danger)'}">${t.mode.toUpperCase()}</small></td>
+                    <td style="color:${t.mode === 'income' ? 'var(--emerald)' : 'var(--danger)'}; font-weight:700">
+                        ${t.mode === 'income' ? '+' : '-'} ${s} ${(t.amt * r).toLocaleString()}
+                    </td>
+                    <td><small>${t.time}</small></td>
+                </tr>
+            `).join('');
+        }
     }
 
-    function runSimulation() {
-        const name = document.getElementById('sim-name').value;
-        const price = parseFloat(document.getElementById('sim-amt').value) || 0;
-        const res = document.getElementById('sim-result');
-
-        if (!name || price <= 0) return alert("Masukkan data simulasi!");
-
-        const futureVal = price * Math.pow(1 + 0.06, 5); 
-        res.style.display = "block";
-        res.innerHTML = `
-            <div style="background:rgba(217, 119, 6, 0.1); padding:10px; border-radius:10px; border:1px solid var(--gold);">
-                <p>📉 <b>Saldo Akhir:</b> Menjadi Rp ${(wallet - price).toLocaleString()}.</p>
-                <p style="margin-top:5px;">⏳ <b>Peluang Hilang:</b> Jika diinvestasikan (6%/thn), uang ini jadi <b>Rp ${Math.round(futureVal).toLocaleString()}</b> dalam 5 thn.</p>
-            </div>
-        `;
+    function getAiFeedback(type, name, amt) {
+        const res = document.getElementById('ai-response');
+        const emoji = document.getElementById('ai-mood-emoji');
+        
+        if (type === 'income') {
+            res.innerText = `"Cuan masuk! Tabung ya, jangan langsung dihabiskan."`;
+            emoji.innerText = "🤑";
+        } else {
+            if (amt > 1000000) {
+                res.innerText = `"Aduh, pengeluaran besar! '${name}' ini beneran butuh atau cuma pengen?"`;
+                emoji.innerText = "😱";
+            } else {
+                res.innerText = `"Oke, pengeluaran kecil tercatat. Tetap disiplin!"`;
+                emoji.innerText = "🧐";
+            }
+        }
     }
 
     function toggleDark() {

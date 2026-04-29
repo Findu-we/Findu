@@ -89,10 +89,20 @@
             z-index: 1000; backdrop-filter: blur(8px);
         }
         .buffer-content {
-            background: white; padding: 2.5rem; border-radius: 2rem;
+            background: var(--card-bg); padding: 2.5rem; border-radius: 2rem;
             text-align: center; max-width: 400px; border: 2px solid var(--gold);
         }
         .timer-circle { font-size: 3rem; font-weight: 800; color: var(--gold); margin: 1rem 0; }
+
+        /* Shake Animation */
+        .shake { animation: shake 0.2s ease-in-out 0s 2; }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
 
         @media (max-width: 900px) {
             .container { grid-template-columns: 1fr; }
@@ -104,10 +114,10 @@
 
 <div id="impulse-overlay">
     <div class="buffer-content">
-        <h2>🤔 Tunggu Sebentar...</h2>
-        <p style="color:#64748b; margin-top:10px;">Kamu ingin mengeluarkan uang cukup besar. Apakah ini benar-benar perlu?</p>
+        <h2 style="color:var(--text-main)">🤔 Tunggu Sebentar...</h2>
+        <p style="color:#64748b; margin-top:10px;">Kamu sedang ingin mengeluarkan uang dalam jumlah besar. Apakah ini benar-benar perlu?</p>
         <div class="timer-circle" id="buffer-timer">5</div>
-        <p><small>"Kesenjangan antara keinginan dan kebutuhan hanya sejauh 5 detik berpikir."</small></p>
+        <p><small>"Kesenjangan antara keinginan dan kebutuhan seringkali hanya sejauh 5 detik berpikir."</small></p>
     </div>
 </div>
 
@@ -143,15 +153,15 @@
         <div class="stats-grid">
             <div class="stat-card bg-wallet">
                 <h4>Saldo Saat Ini</h4>
-                <div class="amount" id="wal-text">0</div>
+                <div class="amount" id="wal-text">Rp 0</div>
             </div>
             <div class="stat-card bg-income">
                 <h4>Pemasukan</h4>
-                <div class="amount" id="income-text">0</div>
+                <div class="amount" id="income-text">Rp 0</div>
             </div>
             <div class="stat-card bg-expense">
                 <h4>Pengeluaran</h4>
-                <div class="amount" id="expense-text">0</div>
+                <div class="amount" id="expense-text">Rp 0</div>
             </div>
         </div>
 
@@ -166,13 +176,6 @@
                 <input type="number" id="tx-amt" placeholder="Nominal">
                 <button onclick="processTx()">Simpan</button>
             </div>
-        </div>
-
-        <div class="card" style="background: linear-gradient(to right, #fff, #f0fdf4);">
-            <h3>📈 Financial Literacy & Invest</h3>
-            <p style="font-size: 0.85rem; margin-bottom: 15px; color: #475569;">Berdasarkan saldomu, inilah strategi yang disarankan:</p>
-            <div id="invest-recom" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                </div>
         </div>
 
         <div class="card">
@@ -218,6 +221,189 @@
     </div>
 </div>
 
-<script src="dashboard.js"></script>
+<script>
+    let wallet = 0;
+    let totalIncome = 0;
+    let totalExpense = 0;
+    let xp = 450;
+    let mode = 'income';
+    let transactions = [];
+    let isBufferActive = false;
+
+    const rates = { IDR: 1, USD: 0.000064, CNY: 0.00046 };
+    const symbols = { IDR: 'Rp', USD: '$', CNY: '¥' };
+
+    window.onload = () => {
+        const session = localStorage.getItem('currentUser');
+        if (session) {
+            const userData = JSON.parse(session);
+            document.getElementById('user-display').innerText = userData.fullname || "User";
+        }
+        updateUI();
+    };
+
+    function setMode(m) {
+        mode = m;
+        document.getElementById('btn-in').style.background = m === 'income' ? 'var(--emerald)' : '#64748b';
+        document.getElementById('btn-out').style.background = m === 'expense' ? 'var(--danger)' : '#64748b';
+    }
+
+    function getAiFeedback(type, name, amt) {
+        const res = document.getElementById('ai-response');
+        const moodEmoji = document.getElementById('ai-mood-emoji');
+        const aiStatus = document.getElementById('ai-status');
+        const aiCard = document.getElementById('ai-card-wrapper');
+        
+        let msg = "";
+        let mood = "😐";
+        let status = "Stabil";
+        aiCard.classList.remove('shake');
+
+        const lowName = name.toLowerCase();
+
+        if (type === 'income') {
+            status = "Senang";
+            mood = "🤑";
+            if (amt > 5000000) {
+                msg = `WIDIH! Rp ${amt.toLocaleString()}? Kamu resmi jadi pahlawan finansial hari ini. Jangan lupa sedekah dan tabung 30%-nya!`;
+                mood = "👑";
+            } else {
+                msg = "Pemasukan masuk radar! Dompetmu tersenyum sekarang.";
+            }
+        } else {
+            const expenseRatio = wallet > 0 ? amt / wallet : 0;
+
+            if (lowName.includes('kopi') || lowName.includes('starbucks')) {
+                status = "Sarkas";
+                mood = "☕";
+                msg = "Lagi-lagi kopi? Ingat, tumpukan struk kopi hari ini bisa jadi tiket liburan di masa depan. Tapi ya sudahlah...";
+            } else if (expenseRatio > 0.5 && wallet > 0) {
+                status = "PANIK";
+                mood = "😱";
+                msg = "STOP! Kamu mengeluarkan lebih dari SETENGAH saldomu hanya untuk satu hal? Ini bahaya, bos!";
+                aiCard.classList.add('shake');
+            } else if (amt > 1000000) {
+                status = "Tegas";
+                mood = "🧐";
+                msg = `Rp ${amt.toLocaleString()} melayang... Pastikan barang '${name}' ini tidak berakhir jadi pajangan berdebu dalam dua minggu.`;
+            } else if (wallet < 500000 && wallet > 0) {
+                status = "Khawatir";
+                mood = "📉";
+                msg = "Saldo kritis! Kamu harus mulai mode hemat ekstrem atau kita bakal makan promag akhir bulan.";
+            } else {
+                status = "Disiplin";
+                mood = "👍";
+                msg = "Pengeluaran tercatat. Masih dalam batas wajar, tapi tetap awasi pengeluaran berikutnya.";
+            }
+        }
+
+        res.innerHTML = `"${msg}"`;
+        moodEmoji.innerText = mood;
+        aiStatus.innerText = status;
+    }
+
+    function processTx() {
+        const name = document.getElementById('tx-name').value.trim();
+        const amt = parseFloat(document.getElementById('tx-amt').value) || 0;
+
+        if (!name || amt <= 0) return alert("Data tidak valid!");
+
+        if (mode === 'expense' && amt >= 500000 && !isBufferActive) {
+            activateBuffer(name, amt);
+            return;
+        }
+
+        executeTransaction(name, amt);
+    }
+
+    function activateBuffer(name, amt) {
+        isBufferActive = true;
+        const overlay = document.getElementById('impulse-overlay');
+        const timerText = document.getElementById('buffer-timer');
+        let timeLeft = 5;
+
+        overlay.style.display = 'flex';
+        
+        const countdown = setInterval(() => {
+            timeLeft--;
+            timerText.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                overlay.style.display = 'none';
+                if (confirm(`Setelah berpikir 5 detik, apakah kamu tetap ingin membeli ${name}?`)) {
+                    executeTransaction(name, amt);
+                }
+                isBufferActive = false;
+            }
+        }, 1000);
+    }
+
+    function executeTransaction(name, amt) {
+        const tx = { name, amt, mode, time: new Date().toLocaleTimeString('id-ID') };
+        transactions.unshift(tx);
+
+        if (mode === 'income') {
+            wallet += amt;
+            totalIncome += amt;
+            xp += 20; 
+        } else {
+            wallet -= amt;
+            totalExpense += amt;
+            xp += 10;
+        }
+
+        updateUI();
+        getAiFeedback(mode, name, amt);
+        
+        document.getElementById('tx-name').value = "";
+        document.getElementById('tx-amt').value = "";
+    }
+
+    function updateUI() {
+        const c = document.getElementById('curr').value;
+        const r = rates[c];
+        const s = symbols[c];
+
+        document.getElementById('wal-text').innerText = `${s} ${(wallet * r).toLocaleString()}`;
+        document.getElementById('income-text').innerText = `${s} ${(totalIncome * r).toLocaleString()}`;
+        document.getElementById('expense-text').innerText = `${s} ${(totalExpense * r).toLocaleString()}`;
+        
+        document.getElementById('xp-text').innerText = xp;
+        document.getElementById('xp-bar').style.width = (xp / 1000 * 100) + "%";
+
+        const body = document.getElementById('tx-body');
+        body.innerHTML = transactions.map(t => `
+            <tr>
+                <td><b>${t.name}</b><br><small style="color:${t.mode === 'income' ? 'var(--emerald)' : 'var(--danger)'}">${t.mode.toUpperCase()}</small></td>
+                <td style="color:${t.mode === 'income' ? 'var(--emerald)' : 'var(--danger)'}; font-weight:700">
+                    ${t.mode === 'income' ? '+' : '-'} ${s} ${(t.amt * r).toLocaleString()}
+                </td>
+                <td><small>${t.time}</small></td>
+            </tr>
+        `).join('') || '<tr><td colspan="3" style="text-align:center">Belum ada data</td></tr>';
+    }
+
+    function runSimulation() {
+        const name = document.getElementById('sim-name').value;
+        const price = parseFloat(document.getElementById('sim-amt').value) || 0;
+        const res = document.getElementById('sim-result');
+
+        if (!name || price <= 0) return alert("Masukkan data simulasi!");
+
+        const futureVal = price * Math.pow(1 + 0.06, 5); 
+        res.style.display = "block";
+        res.innerHTML = `
+            <div style="background:rgba(217, 119, 6, 0.1); padding:10px; border-radius:10px; border:1px solid var(--gold);">
+                <p>📉 <b>Saldo Akhir:</b> Menjadi Rp ${(wallet - price).toLocaleString()}.</p>
+                <p style="margin-top:5px;">⏳ <b>Peluang Hilang:</b> Jika diinvestasikan (6%/thn), uang ini jadi <b>Rp ${Math.round(futureVal).toLocaleString()}</b> dalam 5 thn.</p>
+            </div>
+        `;
+    }
+
+    function toggleDark() {
+        document.body.classList.toggle('dark-mode');
+    }
+</script>
+
 </body>
 </html>

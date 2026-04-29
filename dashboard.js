@@ -377,3 +377,73 @@ function runSimulation() {
 function toggleDark() {
     document.body.classList.toggle('dark-mode');
 }
+// Fungsi untuk menyimpan data ke LocalStorage
+function saveToLocal() {
+    const dataToSave = {
+        wallet,
+        totalIncome,
+        totalExpense,
+        xp,
+        transactions
+    };
+    // Simpan dengan key 'findu_data'
+    localStorage.setItem('findu_data', JSON.stringify(dataToSave));
+}
+
+function executeTransaction(name, amt) {
+    const tx = { 
+        name, 
+        amt, 
+        mode, 
+        time: new Date().toLocaleString('id-ID') // Gunakan toLocaleString agar tanggal tersimpan
+    };
+    transactions.unshift(tx);
+
+    if (mode === 'income') {
+        wallet += amt;
+        totalIncome += amt;
+        xp += 20;
+    } else {
+        wallet -= amt;
+        totalExpense += amt;
+        xp += 10;
+    }
+
+    updateUI();
+    getAiFeedback(mode, name, amt);
+    
+    // SIMPAN KE LOCAL STORAGE
+    saveToLocal();
+
+    document.getElementById('tx-name').value = "";
+    document.getElementById('tx-amt').value = "";
+}
+window.onload = () => {
+    // 1. Cek Sesi Login (User)
+    const session = localStorage.getItem('currentUser');
+    if (session) {
+        const userData = JSON.parse(session);
+        document.getElementById('user-display').innerText = userData.fullname || "User";
+    }
+
+    // 2. Cek Data Transaksi & Saldo Lama
+    const savedData = localStorage.getItem('findu_data');
+    if (savedData) {
+        const parsed = JSON.parse(savedData);
+        
+        // Kembalikan nilai variabel dari penyimpanan
+        wallet = parsed.wallet || 0;
+        totalIncome = parsed.totalIncome || 0;
+        totalExpense = parsed.totalExpense || 0;
+        xp = parsed.xp || 450;
+        transactions = parsed.transactions || [];
+    }
+
+    updateUI();
+};
+function resetData() {
+    if (confirm("Apakah Anda yakin ingin menghapus semua riwayat transaksi?")) {
+        localStorage.removeItem('findu_data');
+        location.reload(); // Refresh halaman
+    }
+}

@@ -30,7 +30,22 @@
             background: var(--dark-bg);
             color: #f1f5f9;
         }
+<div id="impulse-overlay">
+    <div class="buffer-content">
+        <h2 style="color:var(--text-main)">🤔 Tunggu Sebentar...</h2>
+        <p style="color:#64748b; margin-top:10px;">Kamu sedang ingin mengeluarkan uang dalam jumlah besar. Apakah ini benar-benar perlu?</p>
+        <div class="timer-circle" id="buffer-timer">5</div>
+        <p><small>"Kesenjangan antara keinginan dan kebutuhan seringkali hanya sejauh 5 detik berpikir."</small></p>
+    </div>
+</div>
 
+<div class="card" id="ai-card-wrapper">
+    <h3 style="display:flex; align-items:center; gap:8px;">🤖 AI Mentor: <span id="ai-status">Normal</span></h3>
+    <div id="ai-mood-emoji" style="font-size: 3rem; margin: 10px 0;">😐</div>
+    <div class="ai-bubble" id="ai-response">
+        "Halo! Aku FINDU AI. Aku akan mengawasi setiap rupiah yang kamu keluarkan."
+    </div>
+</div>
         /* Navbar */
         nav {
             background: var(--emerald-dark);

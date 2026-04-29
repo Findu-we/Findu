@@ -4,456 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FINDU - Dashboard Premium</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* Tambahan Variabel CSS agar tidak error jika style.css eksternal tidak ada */
+        :root {
+            --emerald: #10b981;
+            --emerald-light: #34d399;
+            --gold: #d97706;
+            --danger: #ef4444;
+            --success: #10b981;
+            --gray-dark: #4b5563;
+            --card-bg: #ffffff;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: #f9fafb; transition: var(--transition); }
+        .dark-mode { background-color: #111827; color: white; }
+        .dark-mode .side-card, .dark-mode .balance-card, .dark-mode .table-section, .dark-mode .input-section { background: #1f2937; border-color: #374151; color: white; }
+        
+        .navbar { background: #064e3b; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .badge { padding: 0.2rem 0.6rem; border-radius: 0.5rem; font-size: 0.7rem; font-weight: bold; }
+        .badge-gold { background: #d97706; color: white; }
+        .badge-success { background: #10b981; color: white; }
+        .btn-main { background: #10b981; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; }
+        .gold-text { color: #d97706; }
+
         .main-content { padding: 2.5rem 5%; max-width: 1400px; margin: auto; }
         .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
         
         /* Header Section */
-        .header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 2.5rem;
-            gap: 2rem;
-        }
-
-        .header-left h1 {
-            font-size: 2.2rem;
-            margin: 0 0 0.5rem 0;
-        }
-
-        .header-right {
-            text-align: right;
-            background: linear-gradient(135deg, rgba(6, 78, 59, 0.05), rgba(217, 119, 6, 0.05));
-            padding: 1.5rem 2rem;
-            border-radius: 1.5rem;
-            border: 1px solid rgba(6, 78, 59, 0.1);
-        }
+        .header-section { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; gap: 2rem; }
+        .header-left h1 { font-size: 2.2rem; margin: 0 0 0.5rem 0; }
+        .header-right { text-align: right; background: rgba(6, 78, 59, 0.05); padding: 1.5rem 2rem; border-radius: 1.5rem; border: 1px solid rgba(6, 78, 59, 0.1); }
 
         /* Progress Bar */
-        .progress-section {
-            margin-top: 1rem;
-        }
-
-        .level-bar {
-            background: #E5E7EB;
-            height: 12px;
-            border-radius: 10px;
-            margin: 0.8rem 0;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            width: 250px;
-        }
-
-        .level-fill {
-            background: linear-gradient(90deg, var(--emerald), var(--gold));
-            height: 100%;
-            width: 45%;
-            transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .level-info {
-            font-size: 0.85rem;
-            color: var(--gray-dark);
-            margin-top: 0.5rem;
-        }
+        .level-bar { background: #E5E7EB; height: 12px; border-radius: 10px; margin: 0.8rem 0; overflow: hidden; width: 250px; }
+        .level-fill { background: linear-gradient(90deg, var(--emerald), var(--gold)); height: 100%; width: 45%; }
 
         /* Balance Cards */
-        .balance-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
+        .balance-section { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        .balance-card { background: var(--card-bg); padding: 2rem; border-radius: 1.5rem; border: 1px solid rgba(0,0,0,0.06); box-shadow: var(--shadow-md); }
+        .balance-card h4 { margin: 0; font-size: 0.9rem; color: var(--gray-dark); }
+        .balance-card .amount { font-size: 1.8rem; font-weight: 800; margin-top: 0.5rem; color: var(--emerald); }
+        .balance-card.expense .amount { color: var(--danger); }
 
-        .balance-card {
-            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255,255,255,0.5) 100%);
-            padding: 2rem;
-            border-radius: 1.5rem;
-            border: 1px solid rgba(0,0,0,0.06);
-            box-shadow: var(--shadow-md);
-        }
+        /* Input & Tabs */
+        .input-section { background: var(--card-bg); padding: 2rem; border-radius: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 2rem; }
+        .tx-tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid #E5E7EB; }
+        .tx-tab { padding: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; }
+        .tx-tab.active { color: var(--emerald); border-bottom-color: var(--emerald); }
+        .input-group { display: grid; grid-template-columns: 2fr 1fr auto; gap: 1rem; }
+        .input-group input { padding: 0.8rem; border: 1px solid #ddd; border-radius: 0.5rem; }
 
-        .balance-card h4 {
-            margin: 0 0 0.5rem 0;
-            font-size: 0.9rem;
-            color: var(--gray-dark);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
+        /* Table */
+        .table-section { background: var(--card-bg); padding: 2rem; border-radius: 1.5rem; box-shadow: var(--shadow-md); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        table th { text-align: left; padding: 1rem; border-bottom: 2px solid #eee; }
+        table td { padding: 1rem; border-bottom: 1px solid #eee; }
 
-        .balance-card .amount {
-            font-size: 2.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-top: 0.5rem;
-        }
-
-        .balance-card.expense .amount {
-            background: linear-gradient(135deg, var(--danger), #EF4444);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Transaction Type Tabs */
-        .tx-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #E5E7EB;
-            padding-bottom: 0;
-        }
-
-        .tx-tab {
-            padding: 1rem 1.5rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--gray-dark);
-            transition: var(--transition);
-            border-bottom: 3px solid transparent;
-            margin-bottom: -2px;
-            font-size: 0.95rem;
-        }
-
-        .tx-tab.active {
-            color: var(--emerald);
-            border-bottom-color: var(--emerald);
-        }
-
-        .tx-tab.expense.active {
-            color: var(--danger);
-            border-bottom-color: var(--danger);
-        }
-
-        /* Input Section */
-        .input-section {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 1.5rem;
-            border: 1px solid rgba(0,0,0,0.06);
-            box-shadow: var(--shadow-md);
-            margin-bottom: 2rem;
-        }
-
-        .input-group {
-            display: grid;
-            grid-template-columns: 2fr 1fr auto;
-            gap: 1rem;
-            align-items: end;
-        }
-
-        .input-group input {
-            padding: 0.9rem 1.2rem;
-        }
-
-        .input-group select {
-            padding: 0.9rem 1.2rem;
-        }
-
-        /* Table Premium */
-        .table-section {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 1.5rem;
-            border: 1px solid rgba(0,0,0,0.06);
-            box-shadow: var(--shadow-md);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1.5rem;
-        }
-
-        table thead {
-            background: linear-gradient(135deg, rgba(6,78,59,0.05), rgba(217,119,6,0.05));
-        }
-
-        table th {
-            text-align: left;
-            color: var(--gray-dark);
-            font-size: 0.85rem;
-            font-weight: 700;
-            padding: 1rem;
-            border-bottom: 2px solid #E5E7EB;
-            letter-spacing: 0.5px;
-        }
-
-        table td {
-            padding: 1.2rem 1rem;
-            border-bottom: 1px solid #E5E7EB;
-        }
-
-        table tbody tr {
-            transition: all 0.3s ease;
-        }
-
-        table tbody tr:hover {
-            background: rgba(6,78,59,0.03);
-        }
-
-        .tx-badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .tx-badge.income {
-            background: rgba(16,185,129,0.15);
-            color: var(--success);
-        }
-
-        .tx-badge.expense {
-            background: rgba(239,68,68,0.15);
-            color: var(--danger);
-        }
-
-        /* Right Column Cards */
-        .side-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 1.5rem;
-            border: 1px solid rgba(0,0,0,0.06);
-            box-shadow: var(--shadow-md);
-            margin-bottom: 1.5rem;
-        }
-
-        .side-card h3 {
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        .side-card.alert {
-            border-left: 4px solid var(--danger);
-            background: linear-gradient(135deg, rgba(239,68,68,0.05), rgba(239,68,68,0.02));
-        }
-
-        .alert-item {
-            font-size: 0.85rem;
-            padding: 0.8rem;
-            background: rgba(0,0,0,0.02);
-            border-radius: 0.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .health-score {
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .health-score .score {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--success), #06B6D4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 0.5rem 0;
-        }
-
-        /* Responsive Improvements */
-        @media (max-width: 1024px) {
-            .grid { grid-template-columns: 1fr; }
-            .balance-section { grid-template-columns: 1fr; }
-            .input-group { grid-template-columns: 1fr; }
-            .header-section { flex-direction: column; align-items: flex-start; }
-            .header-right { text-align: left; width: 100%; }
-            .main-content { padding: 1.5rem 3%; }
-        }
-
-        @media (max-width: 768px) {
-            .main-content { padding: 1rem 2%; }
-            .header-left h1 { font-size: 1.5rem; }
-            .header-right { padding: 1rem 1.5rem; }
-            .level-bar { width: 100%; }
-            .balance-card { padding: 1.5rem; }
-            .balance-card h4 { font-size: 0.8rem; }
-            .balance-card .amount { font-size: 1.6rem; }
-            .input-section { padding: 1.5rem; }
-            .table-section { padding: 1.5rem; }
-            .side-card { padding: 1.2rem; }
-            .side-card h3 { font-size: 1rem; }
-            .health-score .score { font-size: 2.5rem; }
-            table th, table td { padding: 0.7rem; }
-            table th { font-size: 0.75rem; }
-            table td { font-size: 0.8rem; }
-            .balance-section { grid-template-columns: 1fr 1fr !important; }
-            .tx-tabs { gap: 0.5rem; }
-            .tx-tab { padding: 0.8rem 1rem; font-size: 0.85rem; }
-        }
-
-        @media (max-width: 480px) {
-            .main-content { padding: 0.8rem 1%; }
-            .header-section { gap: 1rem; margin-bottom: 1.5rem; }
-            .header-left h1 { font-size: 1.2rem; }
-            .header-left h1 { margin-bottom: 0.3rem; }
-            .shield-active { font-size: 0.85rem; }
-            .header-right { padding: 0.8rem 1rem; font-size: 0.85rem; }
-            .level-bar { height: 10px; margin: 0.5rem 0; }
-            .level-info { font-size: 0.75rem; }
-            .balance-section { gap: 1rem; margin-bottom: 1.5rem; grid-template-columns: 1fr !important; }
-            .balance-card { padding: 1.2rem; margin-bottom: 0; }
-            .balance-card h4 { font-size: 0.75rem; margin-bottom: 0.3rem; }
-            .balance-card .amount { font-size: 1.4rem; margin-top: 0.3rem; }
-            .input-section { padding: 1rem; margin-bottom: 1.5rem; }
-            .input-section h3 { font-size: 1rem; margin-bottom: 0.8rem; }
-            .input-group { gap: 0.6rem; grid-template-columns: 1fr !important; }
-            .input-group input, .input-group button, .input-group select { padding: 0.75rem 0.8rem !important; }
-            .btn-main { padding: 0.75rem 1rem; font-size: 0.9rem; }
-            .table-section { padding: 1rem; }
-            .table-section h3 { font-size: 1rem; margin-bottom: 0.8rem; }
-            table th { padding: 0.6rem 0.4rem; font-size: 0.7rem; }
-            table td { padding: 0.6rem 0.4rem; font-size: 0.75rem; }
-            .side-card { padding: 1rem; margin-bottom: 1rem; }
-            .side-card h3 { font-size: 0.95rem; margin-bottom: 0.8rem; }
-            .side-card p { font-size: 0.8rem; }
-            .alert-item { font-size: 0.75rem; padding: 0.6rem; }
-            .health-score { padding: 0.5rem; }
-            .health-score .score { font-size: 2.2rem; margin: 0.3rem 0; }
-            .tx-tabs { gap: 0.3rem; padding-bottom: 0; }
-            .tx-tab { padding: 0.7rem 0.8rem; font-size: 0.8rem; margin-bottom: -2px; }
-        }
-
-        /* Landscape Mode */
-        @media (max-height: 600px) and (orientation: landscape) {
-            .main-content { padding: 1rem 3%; }
-            .header-section { margin-bottom: 1rem; gap: 1rem; }
-            .header-left h1 { font-size: 1.3rem; margin-bottom: 0.2rem; }
-            .balance-section { margin-bottom: 1rem; gap: 1rem; }
-            .balance-card { padding: 1rem; }
-            .input-section { padding: 1rem; margin-bottom: 1rem; }
-            .input-group input { padding: 0.7rem 1rem; }
-            .table-section { padding: 1rem; }
-            table th, table td { padding: 0.5rem; }
-        }
+        /* Responsive */
+        @media (max-width: 1024px) { .grid { grid-template-columns: 1fr; } .balance-section { grid-template-columns: 1fr; } .input-group { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body id="app-body">
     <nav class="navbar">
-        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-            <div class="logo" style="color: white; font-size: 1.5rem; margin: 0;">FINDU</div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="logo" style="font-weight: 800; font-size: 1.5rem;">FINDU</div>
             <span class="badge badge-gold">PREMIUM</span>
         </div>
-        <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
-            <select id="curr" onchange="updateUI()" class="currency-select">
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <select id="curr" onchange="updateUI()" style="padding: 0.4rem; border-radius: 0.4rem;">
                 <option value="IDR">IDR</option>
                 <option value="USD">USD</option>
                 <option value="SGD">SGD</option>
             </select>
-            <button onclick="toggleDark()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white; transition: var(--transition);">🌙</button>
-            <button onclick="logout()" class="btn-main" style="padding: 0.7rem 1.5rem; font-size: 0.85rem; width: auto;">Log Out</button>
+            <button onclick="toggleDark()" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌙</button>
+            <button onclick="logout()" class="btn-main">Log Out</button>
         </div>
     </nav>
 
     <div class="main-content">
-        <!-- Header -->
         <div class="header-section">
             <div class="header-left">
-                <h1>Selamat Pagi, <span class="gold-text" id="user-display">User</span>! 👋</h1>
-                <div class="shield-active">🛡️ Anti-Fraud Shield: Aktif & Melindungi</div>
+                <h1>Halo, <span class="gold-text" id="user-display">User</span>! 👋</h1>
+                <small>🛡️ Anti-Fraud Shield Aktif</small>
             </div>
             <div class="header-right">
-                <div style="font-weight: 600; margin-bottom: 0.5rem;">Level: <b>Financial Guardian</b></div>
-                <div class="level-bar" style="width: 100%;"><div class="level-fill"></div></div>
+                <div style="font-weight: 600;">Level: Financial Guardian</div>
+                <div class="level-bar"><div class="level-fill"></div></div>
                 <div class="level-info">XP: <b id="xp-display">450</b>/1000</div>
             </div>
         </div>
 
-        <!-- Main Grid -->
         <div class="grid">
-            <!-- Left Column -->
             <div class="left-col">
-                <!-- Balance Cards -->
                 <div class="balance-section">
                     <div class="balance-card">
-                        <h4>💰 Total Wallet</h4>
+                        <h4>💰 Saldo Saat Ini</h4>
                         <div class="amount" id="wal-text">Rp 0</div>
                     </div>
-                    <div class="balance-card" style="border-left: 4px solid var(--gold);">
+                    <div class="balance-card">
                         <h4>📈 Total Pemasukan</h4>
-                        <div class="amount" id="income-text">Rp 0</div>
+                        <div class="amount" id="income-text" style="color: var(--emerald)">Rp 0</div>
                     </div>
-                    <div class="balance-card expense" style="border-left: 4px solid var(--danger);">
+                    <div class="balance-card expense">
                         <h4>📉 Total Pengeluaran</h4>
-                        <div class="amount" id="expense-text">Rp 0</div>
+                        <div class="amount" id="expense-text" style="color: var(--danger)">Rp 0</div>
                     </div>
                 </div>
 
-                <!-- Transaction Input -->
                 <div class="input-section">
-                    <h3 style="margin-top: 0;">➕ Catat Transaksi Baru</h3>
+                    <h3>➕ Catat Transaksi</h3>
                     <div class="tx-tabs">
-                        <button class="tx-tab active" onclick="switchTab('income')">📥 Pemasukan</button>
-                        <button class="tx-tab expense" onclick="switchTab('expense')">📤 Pengeluaran</button>
+                        <button class="tx-tab active" id="tab-income" onclick="switchTab('income')">📥 Pemasukan</button>
+                        <button class="tx-tab" id="tab-expense" onclick="switchTab('expense')">📤 Pengeluaran</button>
                     </div>
                     <div class="input-group">
-                        <input type="text" id="tx-name" placeholder="Deskripsi (misal: Gaji, Belanja)">
-                        <input type="number" id="tx-amt" placeholder="Nominal">
-                        <button onclick="processTx()" class="btn-main" style="width: auto; padding: 0.9rem 2rem;">Catat</button>
+                        <input type="text" id="tx-name" placeholder="Deskripsi">
+                        <input type="number" id="tx-amt" placeholder="Nominal (IDR)">
+                        <button onclick="processTx()" class="btn-main">Simpan</button>
                     </div>
                 </div>
 
-                <!-- Transaction History -->
                 <div class="table-section">
-                    <h3 style="margin-top: 0;">📜 Riwayat Transaksi Terbaru</h3>
+                    <h3>📜 Riwayat Transaksi</h3>
                     <table>
                         <thead>
                             <tr>
-                                <th>TIPE</th>
-                                <th>KETERANGAN</th>
-                                <th>NOMINAL</th>
-                                <th>WAKTU</th>
+                                <th>Keterangan</th>
+                                <th>Nominal</th>
+                                <th>Waktu</th>
                             </tr>
                         </thead>
                         <tbody id="tx-body">
-                            <tr><td colspan="4" style="text-align: center; color: var(--gray-dark);">Belum ada transaksi</td></tr>
+                            <tr><td colspan="3" style="text-align: center;">Belum ada data</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Right Column -->
             <div class="right-col">
-                <!-- Security Alert -->
-                <div class="side-card alert">
-                    <h3 style="margin-top: 0; color: var(--danger);">🛡️ Security Alert</h3>
-                    <div id="alert-list">
-                        <div class="alert-item" style="color: var(--success); background: rgba(16,185,129,0.1);">
-                            ✓ Belum ada ancaman terdeteksi hari ini
-                        </div>
-                    </div>
+                <div class="side-card" style="padding: 1.5rem; background: white; border-radius: 1.5rem; box-shadow: var(--shadow-md);">
+                    <h3 style="color: var(--danger)">🛡️ Keamanan</h3>
+                    <div id="alert-list" style="font-size: 0.9rem;">Sistem aman.</div>
                 </div>
-
-                <!-- Daily Tips -->
-                <div class="side-card">
-                    <h3 style="margin-top: 0;">💡 Tips Hari Ini</h3>
-                    <p style="font-size: 0.9rem; color: var(--gray-dark); margin-bottom: 1rem;" id="tips-box">Memuat tips finansial...</p>
-                    <button class="btn-main" style="width: 100%; padding: 0.8rem;">Modul Investasi</button>
-                </div>
-
-                <!-- Health Score -->
-                <div class="side-card">
-                    <h3 style="margin-top: 0; text-align: center;">📊 Financial Health</h3>
-                    <div class="health-score">
-                        <div class="score" id="score-display">820</div>
-                        <span class="badge badge-success" style="margin-bottom: 1rem;">EXCELLENT</span>
-                        <p style="font-size: 0.85rem; color: var(--gray-dark);">
-                            Anda berhak mendapatkan limit kredit modal usaha hingga <b>50 Juta</b>.
-                        </p>
-                    </div>
+                <br>
+                <div class="side-card" style="padding: 1.5rem; background: white; border-radius: 1.5rem; box-shadow: var(--shadow-md);">
+                    <h3>📊 Health Score</h3>
+                    <div style="font-size: 2.5rem; font-weight: 800; color: var(--emerald); text-align: center;">820</div>
+                    <p style="font-size: 0.8rem; text-align: center;">Kondisi keuangan Anda Sangat Baik.</p>
                 </div>
             </div>
         </div>
@@ -464,49 +164,24 @@
         let totalIncome = 0;
         let totalExpense = 0;
         let currentTxType = 'income';
-        const rates = { IDR: 1, USD: 0.000062, SGD: 0.000085 };
+        let transactions = []; // Simpan data transaksi dalam array agar bisa diconvert mata uangnya
+
+        const rates = { IDR: 1, USD: 0.000065, SGD: 0.000088 };
         const symbols = { IDR: 'Rp', USD: '$', SGD: 'S$' };
-        
-        const tips = [
-            "Pisahkan pendapatan untuk tabungan agar bisnis tidak mandek.",
-            "Hindari pengeluaran konsumtif yang lebih dari 30% pendapatan.",
-            "Gunakan fitur Anti-Debt Shield untuk memblokir notifikasi tawaran Pinjol.",
-            "Financial Health Score Anda naik jika rutin mencatat transaksi mingguan.",
-            "Catat setiap transaksi untuk mendapatkan gambaran finansial yang lebih baik."
-        ];
 
         window.onload = () => {
-            // Cek session
             const session = localStorage.getItem('currentUser');
-            if (!session) {
-                window.location.href = 'index.html';
-                return;
+            if (session) {
+                const userData = JSON.parse(session);
+                document.getElementById('user-display').innerText = userData.fullname || "User";
             }
-            
-            const userData = JSON.parse(session);
-            document.getElementById('user-display').innerText = userData.fullname;
-            document.getElementById('tips-box').innerText = tips[Math.floor(Math.random() * tips.length)];
             updateUI();
         };
 
         function switchTab(type) {
             currentTxType = type;
-            
-            // Update active tab styling
-            const tabs = document.querySelectorAll('.tx-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            if (type === 'income') {
-                tabs[0].classList.add('active');
-                document.getElementById('tx-name').placeholder = "Sumber dana (misal: Gaji, Bonus, Penjualan)";
-            } else {
-                tabs[1].classList.add('active');
-                document.getElementById('tx-name').placeholder = "Pengeluaran (misal: Belanja, Makan, Transportasi)";
-            }
-            
-            // Clear input
-            document.getElementById('tx-name').value = "";
-            document.getElementById('tx-amt').value = "";
+            document.getElementById('tab-income').classList.toggle('active', type === 'income');
+            document.getElementById('tab-expense').classList.toggle('active', type === 'expense');
         }
 
         function processTx() {
@@ -514,91 +189,72 @@
             const amt = parseFloat(document.getElementById('tx-amt').value) || 0;
 
             if (amt <= 0 || name === "") {
-                alert("❌ Masukkan data yang valid!");
+                alert("Mohon masukkan deskripsi dan nominal yang valid!");
                 return;
             }
+
+            const newTx = {
+                id: Date.now(),
+                type: currentTxType,
+                name: name,
+                amount: amt,
+                time: new Date().toLocaleTimeString('id-ID')
+            };
+
+            transactions.unshift(newTx);
 
             if (currentTxType === 'income') {
                 wallet += amt;
                 totalIncome += amt;
-                
-                // Add to table
-                const row = `<tr>
-                    <td><span class="tx-badge income">PEMASUKAN</span></td>
-                    <td><b>${name}</b></td>
-                    <td style="color: var(--success); font-weight: 600;">+Rp ${amt.toLocaleString()}</td>
-                    <td style="color: var(--gray-dark); font-size: 0.85rem;">${new Date().toLocaleTimeString('id-ID')}</td>
-                </tr>`;
-                
-                const txBody = document.getElementById('tx-body');
-                if (txBody.innerHTML.includes('Belum ada transaksi')) {
-                    txBody.innerHTML = row;
-                } else {
-                    txBody.innerHTML = row + txBody.innerHTML;
-                }
-
-                // Fraud detection
-                if (amt > 10000000) {
-                    document.getElementById('alert-list').innerHTML = `
-                        <div class="alert-item" style="color: var(--danger); background: rgba(239,68,68,0.1);">
-                            ⚠️ <b>Aktivitas Tidak Biasa:</b> Pemasukan besar terdeteksi. Sistem mengamankan data.
-                        </div>
-                    `;
-                }
-            } else if (currentTxType === 'expense') {
+            } else {
                 wallet -= amt;
                 totalExpense += amt;
-                
-                // Add to table
-                const row = `<tr>
-                    <td><span class="tx-badge expense">PENGELUARAN</span></td>
-                    <td><b>${name}</b></td>
-                    <td style="color: var(--danger); font-weight: 600;">-Rp ${amt.toLocaleString()}</td>
-                    <td style="color: var(--gray-dark); font-size: 0.85rem;">${new Date().toLocaleTimeString('id-ID')}</td>
-                </tr>`;
-                
-                const txBody = document.getElementById('tx-body');
-                if (txBody.innerHTML.includes('Belum ada transaksi')) {
-                    txBody.innerHTML = row;
-                } else {
-                    txBody.innerHTML = row + txBody.innerHTML;
-                }
-
-                // Warning if expense too high
-                if (amt > 5000000) {
-                    document.getElementById('alert-list').innerHTML = `
-                        <div class="alert-item" style="color: var(--danger); background: rgba(239,68,68,0.1);">
-                            ⚠️ <b>Pengeluaran Besar:</b> Pengeluaran Rp ${amt.toLocaleString()} dicatat. Pantau saldo Anda.
-                        </div>
-                    `;
-                }
             }
 
-            updateUI();
+            // Reset Input
             document.getElementById('tx-name').value = "";
             document.getElementById('tx-amt').value = "";
+            
+            updateUI();
         }
 
         function updateUI() {
-            const c = document.getElementById('curr').value;
-            const rate = rates[c];
-            const sym = symbols[c];
+            const curr = document.getElementById('curr').value;
+            const rate = rates[curr];
+            const sym = symbols[curr];
 
-            // Ensure wallet doesn't go negative
-            if (wallet < 0) wallet = 0;
+            // Update Ringkasan
+            document.getElementById('wal-text').innerText = `${sym} ${(wallet * rate).toLocaleString()}`;
+            document.getElementById('income-text').innerText = `${sym} ${(totalIncome * rate).toLocaleString()}`;
+            document.getElementById('expense-text').innerText = `${sym} ${(totalExpense * rate).toLocaleString()}`;
 
-            document.getElementById('wal-text').innerText = sym + " " + (wallet * rate).toLocaleString(undefined, {maximumFractionDigits: 2});
-            document.getElementById('income-text').innerText = sym + " " + (totalIncome * rate).toLocaleString(undefined, {maximumFractionDigits: 2});
-            document.getElementById('expense-text').innerText = sym + " " + (totalExpense * rate).toLocaleString(undefined, {maximumFractionDigits: 2});
+            // Update Tabel
+            const txBody = document.getElementById('tx-body');
+            if (transactions.length === 0) {
+                txBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Belum ada data</td></tr>';
+            } else {
+                txBody.innerHTML = transactions.map(tx => `
+                    <tr>
+                        <td>
+                            <span style="font-weight:bold">${tx.name}</span><br>
+                            <small style="color:${tx.type === 'income' ? 'green' : 'red'}">${tx.type.toUpperCase()}</small>
+                        </td>
+                        <td style="color:${tx.type === 'income' ? 'green' : 'red'}; font-weight:bold">
+                            ${tx.type === 'income' ? '+' : '-'} ${sym} ${(tx.amount * rate).toLocaleString()}
+                        </td>
+                        <td>${tx.time}</td>
+                    </tr>
+                `).join('');
+            }
         }
 
         function toggleDark() {
-            document.getElementById('app-body').classList.toggle('dark-mode');
+            document.body.classList.toggle('dark-mode');
         }
 
         function logout() {
             localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
+            location.reload();
         }
     </script>
 </body>

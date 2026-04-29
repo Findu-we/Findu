@@ -17,7 +17,28 @@
     --shadow-xl: 0 20px 40px rgba(0,0,0,0.2);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+<style>
+#ai-ego-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--emerald);
+}
 
+#sim-result {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.butterfly-card {
+    background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+    border: 1px solid #fef3c7;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    margin-top: 2rem;
+}
 body.dark-mode {
     --bg-body: #0F172A;
     --card-bg: #1E293B;

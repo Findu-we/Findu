@@ -257,5 +257,286 @@
             location.reload();
         }
     </script>
+    <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINDU - Ultimate Premium Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --emerald: #10b981;
+            --emerald-dark: #064e3b;
+            --gold: #d97706;
+            --danger: #ef4444;
+            --dark-bg: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #1e293b;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body { 
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); 
+            color: var(--text-main); 
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        nav {
+            background: var(--emerald-dark);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
+        .badge-premium { background: var(--gold); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
+
+        /* Main Layout */
+        .container { padding: 2rem 5%; max-width: 1400px; margin: auto; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 1.5rem; 
+            padding: 1.5rem; 
+            box-shadow: var(--shadow); 
+            border: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { padding: 1.5rem; border-radius: 1rem; color: white; }
+        .bg-wallet { background: linear-gradient(135deg, #10b981, #059669); }
+        .bg-income { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .bg-expense { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .stat-card h4 { font-size: 0.8rem; opacity: 0.9; text-transform: uppercase; }
+        .stat-card .amount { font-size: 1.5rem; font-weight: 800; margin-top: 0.5rem; }
+
+        /* AI Ego Section */
+        #ai-ego-card { background: linear-gradient(135deg, #ffffff, #f1f5f9); border-left: 5px solid var(--emerald); }
+        .ai-bubble { font-style: italic; color: #475569; padding: 10px; border-radius: 10px; background: white; border: 1px solid #e2e8f0; }
+
+        /* Forms */
+        .input-group { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        input, select { padding: 0.8rem; border: 1px solid #cbd5e1; border-radius: 0.8rem; outline: none; width: 100%; }
+        button { 
+            padding: 0.8rem 1.5rem; 
+            border-radius: 0.8rem; 
+            border: none; 
+            background: var(--emerald-dark); 
+            color: white; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        button:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th { text-align: left; padding: 1rem; font-size: 0.8rem; color: #64748b; border-bottom: 2px solid #f1f5f9; }
+        td { padding: 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div style="display:flex; align-items:center; gap:10px;">
+        <span class="logo">FINDU</span>
+        <span class="badge-premium">PREMIUM</span>
+    </div>
+    <div style="display:flex; gap:15px; align-items:center;">
+        <select id="curr" onchange="updateUI()" style="width:auto; padding:5px;">
+            <option value="IDR">IDR</option>
+            <option value="USD">USD</option>
+        </select>
+        <button onclick="location.reload()" style="background:rgba(255,255,255,0.2); padding:5px 15px;">Reset</button>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="left-col">
+        <div class="stats-grid">
+            <div class="stat-card bg-wallet">
+                <h4>Saldo Saat Ini</h4>
+                <div class="amount" id="wal-text">Rp 0</div>
+            </div>
+            <div class="stat-card bg-income">
+                <h4>Pemasukan</h4>
+                <div class="amount" id="income-text">Rp 0</div>
+            </div>
+            <div class="stat-card bg-expense">
+                <h4>Pengeluaran</h4>
+                <div class="amount" id="expense-text">Rp 0</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>➕ Catat Transaksi</h3>
+            <div style="margin: 1rem 0;">
+                <button id="btn-in" onclick="setMode('income')" style="background:var(--emerald)">Pemasukan</button>
+                <button id="btn-out" onclick="setMode('expense')" style="background:#64748b">Pengeluaran</button>
+            </div>
+            <div class="input-group">
+                <input type="text" id="tx-name" placeholder="Deskripsi (Misal: Gaji, Kopi)">
+                <input type="number" id="tx-amt" placeholder="Nominal">
+                <button onclick="processTx()">Simpan</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📜 Riwayat Transaksi</h3>
+            <table id="tx-table">
+                <thead>
+                    <tr>
+                        <th>Keterangan</th>
+                        <th>Nominal</th>
+                        <th>Waktu</th>
+                    </tr>
+                </thead>
+                <tbody id="tx-body">
+                    <tr><td colspan="3" style="text-align:center">Belum ada data</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="right-col">
+        <div class="card" id="ai-ego-card">
+            <h3 style="display:flex; align-items:center; gap:8px;">🤖 AI Mentor <small style="font-size:0.6rem; background:#10b981; color:white; padding:2px 6px; border-radius:10px;">AKTIF</small></h3>
+            <p style="font-size:0.8rem; margin:10px 0;">Feedback Instan Gaya Hidupmu:</p>
+            <div class="ai-bubble" id="ai-response">
+                "Halo! Aku FINDU AI. Masukkan transaksi untuk mendengar pendapatku."
+            </div>
+        </div>
+
+        <div class="card" style="border-top: 5px solid var(--gold);">
+            <h3>🦋 Butterfly Simulator</h3>
+            <p style="font-size:0.8rem; margin-bottom:10px;">Cek efek jika kamu belanja barang mewah sekarang:</p>
+            <input type="text" id="sim-name" placeholder="Barang impian (Misal: PS5)" style="margin-bottom:10px;">
+            <input type="number" id="sim-amt" placeholder="Harga Barang" style="margin-bottom:10px;">
+            <button onclick="runSimulation()" style="width:100%; background:var(--gold)">Analisis Masa Depan</button>
+            
+            <div id="sim-result" style="margin-top:15px; display:none; font-size:0.85rem; border-top:1px solid #ddd; padding-top:10px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let wallet = 0;
+    let totalIncome = 0;
+    let totalExpense = 0;
+    let mode = 'income';
+    let transactions = [];
+
+    const rates = { IDR: 1, USD: 0.000064 };
+    const symbols = { IDR: 'Rp', USD: '$' };
+
+    function setMode(m) {
+        mode = m;
+        document.getElementById('btn-in').style.background = m === 'income' ? 'var(--emerald)' : '#64748b';
+        document.getElementById('btn-out').style.background = m === 'expense' ? 'var(--danger)' : '#64748b';
+    }
+
+    function processTx() {
+        const name = document.getElementById('tx-name').value.trim();
+        const amt = parseFloat(document.getElementById('tx-amt').value) || 0;
+
+        if (!name || amt <= 0) return alert("Data tidak valid!");
+
+        const tx = { name, amt, mode, time: new Date().toLocaleTimeString('id-ID') };
+        transactions.unshift(tx);
+
+        if (mode === 'income') {
+            wallet += amt;
+            totalIncome += amt;
+        } else {
+            wallet -= amt;
+            totalExpense += amt;
+        }
+
+        updateUI();
+        getAiFeedback(mode, name, amt);
+        
+        document.getElementById('tx-name').value = "";
+        document.getElementById('tx-amt').value = "";
+    }
+
+    function updateUI() {
+        const c = document.getElementById('curr').value;
+        const r = rates[c];
+        const s = symbols[c];
+
+        document.getElementById('wal-text').innerText = `${s} ${(wallet * r).toLocaleString()}`;
+        document.getElementById('income-text').innerText = `${s} ${(totalIncome * r).toLocaleString()}`;
+        document.getElementById('expense-text').innerText = `${s} ${(totalExpense * r).toLocaleString()}`;
+
+        const body = document.getElementById('tx-body');
+        body.innerHTML = transactions.map(t => `
+            <tr>
+                <td><b>${t.name}</b><br><small style="color:${t.mode === 'income' ? 'green' : 'red'}">${t.mode.toUpperCase()}</small></td>
+                <td style="color:${t.mode === 'income' ? 'green' : 'red'}">${t.mode === 'income' ? '+' : '-'} ${s} ${(t.amt * r).toLocaleString()}</td>
+                <td><small>${t.time}</small></td>
+            </tr>
+        `).join('') || '<tr><td colspan="3" style="text-align:center">Belum ada data</td></tr>';
+    }
+
+    // FITUR #1: AI FEEDBACK LOGIC
+    function getAiFeedback(type, name, amt) {
+        const res = document.getElementById('ai-response');
+        let msg = "";
+        const coffeeWords = ['kopi', 'coffee', 'starbucks', 'kenangan', 'boba'];
+
+        if (type === 'income') {
+            msg = amt > 1000000 ? "Gila! Rezeki nomplok. Tabung 50% ya, jangan langsung checkout keranjang!" : "Mantap, ada pemasukan masuk. Sedikit demi sedikit jadi bukit.";
+        } else {
+            if (coffeeWords.some(w => name.toLowerCase().includes(w))) {
+                msg = "Ngopi terus! Coba uang kopinya dikumpulin sebulan, mungkin bisa beli saham kedai kopinya.";
+            } else if (amt > 500000) {
+                msg = "Waduh, pengeluaran cukup besar terdeteksi. Yakin ini kebutuhan primer?";
+            } else {
+                msg = "Oke, pengeluaran tercatat. Masih aman dalam batas wajar.";
+            }
+        }
+        res.innerHTML = `<b>AI:</b> "${msg}"`;
+    }
+
+    // FITUR #4: BUTTERFLY SIMULATOR LOGIC
+    function runSimulation() {
+        const name = document.getElementById('sim-name').value;
+        const price = parseFloat(document.getElementById('sim-amt').value) || 0;
+        const res = document.getElementById('sim-result');
+
+        if (!name || price <= 0) return alert("Masukkan data simulasi!");
+
+        const futureVal = price * Math.pow(1 + 0.06, 5); // Simulasi jika uang diinvestasikan 5 tahun (bunga 6%)
+        
+        res.style.display = "block";
+        res.innerHTML = `
+            <div style="background:#fefce8; padding:10px; border-radius:10px; border:1px solid #fef3c7;">
+                <p>📉 <b>Efek Langsung:</b> Saldo kamu akan langsung berkurang menjadi <b>Rp ${(wallet - price).toLocaleString()}</b>.</p>
+                <p style="margin-top:8px;">⏳ <b>Efek Masa Depan:</b> Jika uang Rp ${price.toLocaleString()} ini kamu investasikan, dalam 5 tahun bisa menjadi <b>Rp ${Math.round(futureVal).toLocaleString()}</b>.</p>
+                <p style="margin-top:8px; color:var(--danger)"><b>Keputusan:</b> Apakah ${name} setara dengan kehilangan Rp ${Math.round(futureVal).toLocaleString()} di masa depan?</p>
+            </div>
+        `;
+    }
+</script>
+
+</body>
+</html>
 </body>
 </html>

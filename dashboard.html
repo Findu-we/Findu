@@ -3,267 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FINDU - Dashboard Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        /* Tambahan Variabel CSS agar tidak error jika style.css eksternal tidak ada */
-        :root {
-            --emerald: #10b981;
-            --emerald-light: #34d399;
-            --gold: #d97706;
-            --danger: #ef4444;
-            --success: #10b981;
-            --gray-dark: #4b5563;
-            --card-bg: #ffffff;
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
-        body { font-family: 'Inter', sans-serif; margin: 0; background-color: #f9fafb; transition: var(--transition); }
-        .dark-mode { background-color: #111827; color: white; }
-        .dark-mode .side-card, .dark-mode .balance-card, .dark-mode .table-section, .dark-mode .input-section { background: #1f2937; border-color: #374151; color: white; }
-        
-        .navbar { background: #064e3b; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; color: white; }
-        .badge { padding: 0.2rem 0.6rem; border-radius: 0.5rem; font-size: 0.7rem; font-weight: bold; }
-        .badge-gold { background: #d97706; color: white; }
-        .badge-success { background: #10b981; color: white; }
-        .btn-main { background: #10b981; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; }
-        .gold-text { color: #d97706; }
-
-        .main-content { padding: 2.5rem 5%; max-width: 1400px; margin: auto; }
-        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
-        
-        /* Header Section */
-        .header-section { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; gap: 2rem; }
-        .header-left h1 { font-size: 2.2rem; margin: 0 0 0.5rem 0; }
-        .header-right { text-align: right; background: rgba(6, 78, 59, 0.05); padding: 1.5rem 2rem; border-radius: 1.5rem; border: 1px solid rgba(6, 78, 59, 0.1); }
-
-        /* Progress Bar */
-        .level-bar { background: #E5E7EB; height: 12px; border-radius: 10px; margin: 0.8rem 0; overflow: hidden; width: 250px; }
-        .level-fill { background: linear-gradient(90deg, var(--emerald), var(--gold)); height: 100%; width: 45%; }
-
-        /* Balance Cards */
-        .balance-section { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-        .balance-card { background: var(--card-bg); padding: 2rem; border-radius: 1.5rem; border: 1px solid rgba(0,0,0,0.06); box-shadow: var(--shadow-md); }
-        .balance-card h4 { margin: 0; font-size: 0.9rem; color: var(--gray-dark); }
-        .balance-card .amount { font-size: 1.8rem; font-weight: 800; margin-top: 0.5rem; color: var(--emerald); }
-        .balance-card.expense .amount { color: var(--danger); }
-
-        /* Input & Tabs */
-        .input-section { background: var(--card-bg); padding: 2rem; border-radius: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 2rem; }
-        .tx-tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid #E5E7EB; }
-        .tx-tab { padding: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; }
-        .tx-tab.active { color: var(--emerald); border-bottom-color: var(--emerald); }
-        .input-group { display: grid; grid-template-columns: 2fr 1fr auto; gap: 1rem; }
-        .input-group input { padding: 0.8rem; border: 1px solid #ddd; border-radius: 0.5rem; }
-
-        /* Table */
-        .table-section { background: var(--card-bg); padding: 2rem; border-radius: 1.5rem; box-shadow: var(--shadow-md); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        table th { text-align: left; padding: 1rem; border-bottom: 2px solid #eee; }
-        table td { padding: 1rem; border-bottom: 1px solid #eee; }
-
-        /* Responsive */
-        @media (max-width: 1024px) { .grid { grid-template-columns: 1fr; } .balance-section { grid-template-columns: 1fr; } .input-group { grid-template-columns: 1fr; } }
-    </style>
-</head>
-<body id="app-body">
-    <nav class="navbar">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <div class="logo" style="font-weight: 800; font-size: 1.5rem;">FINDU</div>
-            <span class="badge badge-gold">PREMIUM</span>
-        </div>
-        <div style="display: flex; gap: 1rem; align-items: center;">
-            <select id="curr" onchange="updateUI()" style="padding: 0.4rem; border-radius: 0.4rem;">
-                <option value="IDR">IDR</option>
-                <option value="USD">USD</option>
-                <option value="SGD">SGD</option>
-            </select>
-            <button onclick="toggleDark()" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌙</button>
-            <button onclick="logout()" class="btn-main">Log Out</button>
-        </div>
-    </nav>
-
-    <div class="main-content">
-        <div class="header-section">
-            <div class="header-left">
-                <h1>Halo, <span class="gold-text" id="user-display">User</span>! 👋</h1>
-                <small>🛡️ Anti-Fraud Shield Aktif</small>
-            </div>
-            <div class="header-right">
-                <div style="font-weight: 600;">Level: Financial Guardian</div>
-                <div class="level-bar"><div class="level-fill"></div></div>
-                <div class="level-info">XP: <b id="xp-display">450</b>/1000</div>
-            </div>
-        </div>
-
-        <div class="grid">
-            <div class="left-col">
-                <div class="balance-section">
-                    <div class="balance-card">
-                        <h4>💰 Saldo Saat Ini</h4>
-                        <div class="amount" id="wal-text">Rp 0</div>
-                    </div>
-                    <div class="balance-card">
-                        <h4>📈 Total Pemasukan</h4>
-                        <div class="amount" id="income-text" style="color: var(--emerald)">Rp 0</div>
-                    </div>
-                    <div class="balance-card expense">
-                        <h4>📉 Total Pengeluaran</h4>
-                        <div class="amount" id="expense-text" style="color: var(--danger)">Rp 0</div>
-                    </div>
-                </div>
-
-                <div class="input-section">
-                    <h3>➕ Catat Transaksi</h3>
-                    <div class="tx-tabs">
-                        <button class="tx-tab active" id="tab-income" onclick="switchTab('income')">📥 Pemasukan</button>
-                        <button class="tx-tab" id="tab-expense" onclick="switchTab('expense')">📤 Pengeluaran</button>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" id="tx-name" placeholder="Deskripsi">
-                        <input type="number" id="tx-amt" placeholder="Nominal (IDR)">
-                        <button onclick="processTx()" class="btn-main">Simpan</button>
-                    </div>
-                </div>
-
-                <div class="table-section">
-                    <h3>📜 Riwayat Transaksi</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Keterangan</th>
-                                <th>Nominal</th>
-                                <th>Waktu</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tx-body">
-                            <tr><td colspan="3" style="text-align: center;">Belum ada data</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="right-col">
-                <div class="side-card" style="padding: 1.5rem; background: white; border-radius: 1.5rem; box-shadow: var(--shadow-md);">
-                    <h3 style="color: var(--danger)">🛡️ Keamanan</h3>
-                    <div id="alert-list" style="font-size: 0.9rem;">Sistem aman.</div>
-                </div>
-                <br>
-                <div class="side-card" style="padding: 1.5rem; background: white; border-radius: 1.5rem; box-shadow: var(--shadow-md);">
-                    <h3>📊 Health Score</h3>
-                    <div style="font-size: 2.5rem; font-weight: 800; color: var(--emerald); text-align: center;">820</div>
-                    <p style="font-size: 0.8rem; text-align: center;">Kondisi keuangan Anda Sangat Baik.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let wallet = 0;
-        let totalIncome = 0;
-        let totalExpense = 0;
-        let currentTxType = 'income';
-        let transactions = []; // Simpan data transaksi dalam array agar bisa diconvert mata uangnya
-
-        const rates = { IDR: 1, USD: 0.000065, SGD: 0.000088 };
-        const symbols = { IDR: 'Rp', USD: '$', SGD: 'S$' };
-
-        window.onload = () => {
-            const session = localStorage.getItem('currentUser');
-            if (session) {
-                const userData = JSON.parse(session);
-                document.getElementById('user-display').innerText = userData.fullname || "User";
-            }
-            updateUI();
-        };
-
-        function switchTab(type) {
-            currentTxType = type;
-            document.getElementById('tab-income').classList.toggle('active', type === 'income');
-            document.getElementById('tab-expense').classList.toggle('active', type === 'expense');
-        }
-
-        function processTx() {
-            const name = document.getElementById('tx-name').value.trim();
-            const amt = parseFloat(document.getElementById('tx-amt').value) || 0;
-
-            if (amt <= 0 || name === "") {
-                alert("Mohon masukkan deskripsi dan nominal yang valid!");
-                return;
-            }
-
-            const newTx = {
-                id: Date.now(),
-                type: currentTxType,
-                name: name,
-                amount: amt,
-                time: new Date().toLocaleTimeString('id-ID')
-            };
-
-            transactions.unshift(newTx);
-
-            if (currentTxType === 'income') {
-                wallet += amt;
-                totalIncome += amt;
-            } else {
-                wallet -= amt;
-                totalExpense += amt;
-            }
-
-            // Reset Input
-            document.getElementById('tx-name').value = "";
-            document.getElementById('tx-amt').value = "";
-            
-            updateUI();
-        }
-
-        function updateUI() {
-            const curr = document.getElementById('curr').value;
-            const rate = rates[curr];
-            const sym = symbols[curr];
-
-            // Update Ringkasan
-            document.getElementById('wal-text').innerText = `${sym} ${(wallet * rate).toLocaleString()}`;
-            document.getElementById('income-text').innerText = `${sym} ${(totalIncome * rate).toLocaleString()}`;
-            document.getElementById('expense-text').innerText = `${sym} ${(totalExpense * rate).toLocaleString()}`;
-
-            // Update Tabel
-            const txBody = document.getElementById('tx-body');
-            if (transactions.length === 0) {
-                txBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Belum ada data</td></tr>';
-            } else {
-                txBody.innerHTML = transactions.map(tx => `
-                    <tr>
-                        <td>
-                            <span style="font-weight:bold">${tx.name}</span><br>
-                            <small style="color:${tx.type === 'income' ? 'green' : 'red'}">${tx.type.toUpperCase()}</small>
-                        </td>
-                        <td style="color:${tx.type === 'income' ? 'green' : 'red'}; font-weight:bold">
-                            ${tx.type === 'income' ? '+' : '-'} ${sym} ${(tx.amount * rate).toLocaleString()}
-                        </td>
-                        <td>${tx.time}</td>
-                    </tr>
-                `).join('');
-            }
-        }
-
-        function toggleDark() {
-            document.body.classList.toggle('dark-mode');
-        }
-
-        function logout() {
-            localStorage.removeItem('currentUser');
-            location.reload();
-        }
-    </script>
-    <!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FINDU - Ultimate Premium Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --emerald: #10b981;
@@ -271,7 +12,7 @@
             --gold: #d97706;
             --danger: #ef4444;
             --dark-bg: #0f172a;
-            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-bg: #ffffff;
             --text-main: #1e293b;
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
@@ -279,9 +20,15 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
         body { 
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); 
+            background: #f1f5f9; 
             color: var(--text-main); 
             min-height: 100vh;
+            transition: 0.3s;
+        }
+
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: #f1f5f9;
         }
 
         /* Navbar */
@@ -308,35 +55,42 @@
             border-radius: 1.5rem; 
             padding: 1.5rem; 
             box-shadow: var(--shadow); 
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(0,0,0,0.05);
             margin-bottom: 1.5rem;
         }
 
-        /* Stats */
+        .dark-mode .card {
+            background: #1e293b;
+            border-color: #334155;
+            color: white;
+        }
+
+        /* Header Section */
+        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .level-bar { background: #e2e8f0; height: 10px; border-radius: 10px; width: 200px; margin-top: 5px; overflow: hidden; }
+        .level-fill { background: var(--gold); height: 100%; width: 45%; transition: 0.5s; }
+
+        /* Stats Grid */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
-        .stat-card { padding: 1.5rem; border-radius: 1rem; color: white; }
+        .stat-card { padding: 1.5rem; border-radius: 1.2rem; color: white; }
         .bg-wallet { background: linear-gradient(135deg, #10b981, #059669); }
         .bg-income { background: linear-gradient(135deg, #3b82f6, #2563eb); }
         .bg-expense { background: linear-gradient(135deg, #ef4444, #dc2626); }
         .stat-card h4 { font-size: 0.8rem; opacity: 0.9; text-transform: uppercase; }
         .stat-card .amount { font-size: 1.5rem; font-weight: 800; margin-top: 0.5rem; }
 
-        /* AI Ego Section */
-        #ai-ego-card { background: linear-gradient(135deg, #ffffff, #f1f5f9); border-left: 5px solid var(--emerald); }
-        .ai-bubble { font-style: italic; color: #475569; padding: 10px; border-radius: 10px; background: white; border: 1px solid #e2e8f0; }
+        /* AI & Utility */
+        .ai-bubble { font-style: italic; color: #64748b; padding: 1rem; border-radius: 1rem; background: #f8fafc; border-left: 4px solid var(--emerald); margin-top: 10px; }
+        .dark-mode .ai-bubble { background: #0f172a; color: #cbd5e1; }
 
         /* Forms */
         .input-group { display: flex; gap: 0.5rem; margin-top: 1rem; }
         input, select { padding: 0.8rem; border: 1px solid #cbd5e1; border-radius: 0.8rem; outline: none; width: 100%; }
+        .dark-mode input { background: #0f172a; color: white; border-color: #334155; }
+        
         button { 
-            padding: 0.8rem 1.5rem; 
-            border-radius: 0.8rem; 
-            border: none; 
-            background: var(--emerald-dark); 
-            color: white; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: 0.3s;
+            padding: 0.8rem 1.5rem; border-radius: 0.8rem; border: none; 
+            background: var(--emerald-dark); color: white; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
         button:hover { opacity: 0.9; transform: translateY(-2px); }
 
@@ -363,12 +117,24 @@
             <option value="IDR">IDR</option>
             <option value="USD">USD</option>
         </select>
-        <button onclick="location.reload()" style="background:rgba(255,255,255,0.2); padding:5px 15px;">Reset</button>
+        <button onclick="toggleDark()" style="background:rgba(255,255,255,0.2); padding:5px 10px;">🌙 Mode</button>
     </div>
 </nav>
 
 <div class="container">
     <div class="left-col">
+        <div class="header-section">
+            <div>
+                <h1>Halo, <span id="user-display" style="color:var(--gold)">User</span>! 👋</h1>
+                <p style="font-size: 0.9rem; opacity: 0.8;">🛡️ Anti-Fraud Shield Aktif</p>
+            </div>
+            <div style="text-align: right;">
+                <span style="font-weight: 700; font-size: 0.8rem;">Level: Financial Guardian</span>
+                <div class="level-bar"><div class="level-fill" id="xp-bar"></div></div>
+                <small>XP: <span id="xp-text">450</span>/1000</small>
+            </div>
+        </div>
+
         <div class="stats-grid">
             <div class="stat-card bg-wallet">
                 <h4>Saldo Saat Ini</h4>
@@ -386,9 +152,9 @@
 
         <div class="card">
             <h3>➕ Catat Transaksi</h3>
-            <div style="margin: 1rem 0;">
-                <button id="btn-in" onclick="setMode('income')" style="background:var(--emerald)">Pemasukan</button>
-                <button id="btn-out" onclick="setMode('expense')" style="background:#64748b">Pengeluaran</button>
+            <div style="margin: 1rem 0; display: flex; gap: 10px;">
+                <button id="btn-in" onclick="setMode('income')" style="background:var(--emerald)">📥 Pemasukan</button>
+                <button id="btn-out" onclick="setMode('expense')" style="background:#64748b">📤 Pengeluaran</button>
             </div>
             <div class="input-group">
                 <input type="text" id="tx-name" placeholder="Deskripsi (Misal: Gaji, Kopi)">
@@ -415,9 +181,8 @@
     </div>
 
     <div class="right-col">
-        <div class="card" id="ai-ego-card">
-            <h3 style="display:flex; align-items:center; gap:8px;">🤖 AI Mentor <small style="font-size:0.6rem; background:#10b981; color:white; padding:2px 6px; border-radius:10px;">AKTIF</small></h3>
-            <p style="font-size:0.8rem; margin:10px 0;">Feedback Instan Gaya Hidupmu:</p>
+        <div class="card">
+            <h3 style="display:flex; align-items:center; gap:8px;">🤖 AI Mentor</h3>
             <div class="ai-bubble" id="ai-response">
                 "Halo! Aku FINDU AI. Masukkan transaksi untuk mendengar pendapatku."
             </div>
@@ -425,13 +190,17 @@
 
         <div class="card" style="border-top: 5px solid var(--gold);">
             <h3>🦋 Butterfly Simulator</h3>
-            <p style="font-size:0.8rem; margin-bottom:10px;">Cek efek jika kamu belanja barang mewah sekarang:</p>
-            <input type="text" id="sim-name" placeholder="Barang impian (Misal: PS5)" style="margin-bottom:10px;">
-            <input type="number" id="sim-amt" placeholder="Harga Barang" style="margin-bottom:10px;">
-            <button onclick="runSimulation()" style="width:100%; background:var(--gold)">Analisis Masa Depan</button>
-            
-            <div id="sim-result" style="margin-top:15px; display:none; font-size:0.85rem; border-top:1px solid #ddd; padding-top:10px;">
-            </div>
+            <p style="font-size:0.8rem; margin:10px 0;">Analisis efek belanja mewah terhadap masa depanmu:</p>
+            <input type="text" id="sim-name" placeholder="Barang (Misal: PS5)" style="margin-bottom:10px;">
+            <input type="number" id="sim-amt" placeholder="Harga" style="margin-bottom:10px;">
+            <button onclick="runSimulation()" style="width:100%; background:var(--gold)">Cek Masa Depan</button>
+            <div id="sim-result" style="margin-top:15px; display:none; font-size:0.85rem; border-top:1px solid #ddd; padding-top:10px;"></div>
+        </div>
+
+        <div class="card">
+            <h3>📊 Health Score</h3>
+            <div style="font-size: 2.5rem; font-weight: 800; color: var(--emerald); text-align: center; margin: 10px 0;">820</div>
+            <p style="font-size: 0.8rem; text-align: center; opacity: 0.8;">Kondisi keuangan Anda Sangat Baik.</p>
         </div>
     </div>
 </div>
@@ -440,11 +209,21 @@
     let wallet = 0;
     let totalIncome = 0;
     let totalExpense = 0;
+    let xp = 450;
     let mode = 'income';
     let transactions = [];
 
     const rates = { IDR: 1, USD: 0.000064 };
     const symbols = { IDR: 'Rp', USD: '$' };
+
+    window.onload = () => {
+        const session = localStorage.getItem('currentUser');
+        if (session) {
+            const userData = JSON.parse(session);
+            document.getElementById('user-display').innerText = userData.fullname || "User";
+        }
+        updateUI();
+    };
 
     function setMode(m) {
         mode = m;
@@ -464,9 +243,11 @@
         if (mode === 'income') {
             wallet += amt;
             totalIncome += amt;
+            xp += 20; 
         } else {
             wallet -= amt;
             totalExpense += amt;
+            xp += 10;
         }
 
         updateUI();
@@ -484,38 +265,42 @@
         document.getElementById('wal-text').innerText = `${s} ${(wallet * r).toLocaleString()}`;
         document.getElementById('income-text').innerText = `${s} ${(totalIncome * r).toLocaleString()}`;
         document.getElementById('expense-text').innerText = `${s} ${(totalExpense * r).toLocaleString()}`;
+        
+        // Update XP
+        document.getElementById('xp-text').innerText = xp;
+        document.getElementById('xp-bar').style.width = (xp / 1000 * 100) + "%";
 
         const body = document.getElementById('tx-body');
         body.innerHTML = transactions.map(t => `
             <tr>
-                <td><b>${t.name}</b><br><small style="color:${t.mode === 'income' ? 'green' : 'red'}">${t.mode.toUpperCase()}</small></td>
-                <td style="color:${t.mode === 'income' ? 'green' : 'red'}">${t.mode === 'income' ? '+' : '-'} ${s} ${(t.amt * r).toLocaleString()}</td>
+                <td><b>${t.name}</b><br><small style="color:${t.mode === 'income' ? 'var(--emerald)' : 'var(--danger)'}">${t.mode.toUpperCase()}</small></td>
+                <td style="color:${t.mode === 'income' ? 'var(--emerald)' : 'var(--danger)'}; font-weight:700">
+                    ${t.mode === 'income' ? '+' : '-'} ${s} ${(t.amt * r).toLocaleString()}
+                </td>
                 <td><small>${t.time}</small></td>
             </tr>
         `).join('') || '<tr><td colspan="3" style="text-align:center">Belum ada data</td></tr>';
     }
 
-    // FITUR #1: AI FEEDBACK LOGIC
     function getAiFeedback(type, name, amt) {
         const res = document.getElementById('ai-response');
         let msg = "";
-        const coffeeWords = ['kopi', 'coffee', 'starbucks', 'kenangan', 'boba'];
-
+        const lowName = name.toLowerCase();
+        
         if (type === 'income') {
-            msg = amt > 1000000 ? "Gila! Rezeki nomplok. Tabung 50% ya, jangan langsung checkout keranjang!" : "Mantap, ada pemasukan masuk. Sedikit demi sedikit jadi bukit.";
+            msg = amt > 1000000 ? "Rezeki nomplok! Amankan 20% ke tabungan sebelum ludes ya." : "Kerja bagus! Pemasukan sekecil apapun adalah progress.";
         } else {
-            if (coffeeWords.some(w => name.toLowerCase().includes(w))) {
-                msg = "Ngopi terus! Coba uang kopinya dikumpulin sebulan, mungkin bisa beli saham kedai kopinya.";
+            if (lowName.includes('kopi') || lowName.includes('ngopi')) {
+                msg = "Ngopi lagi? Hati-hati efek 'Latte Factor', kecil tapi sering bisa bikin bocor alus.";
             } else if (amt > 500000) {
-                msg = "Waduh, pengeluaran cukup besar terdeteksi. Yakin ini kebutuhan primer?";
+                msg = "Pengeluaran cukup besar! Pastikan ini kebutuhan, bukan sekadar gengsi.";
             } else {
-                msg = "Oke, pengeluaran tercatat. Masih aman dalam batas wajar.";
+                msg = "Pengeluaran tercatat. Tetap disiplin dengan budgetmu!";
             }
         }
-        res.innerHTML = `<b>AI:</b> "${msg}"`;
+        res.innerHTML = `"${msg}"`;
     }
 
-    // FITUR #4: BUTTERFLY SIMULATOR LOGIC
     function runSimulation() {
         const name = document.getElementById('sim-name').value;
         const price = parseFloat(document.getElementById('sim-amt').value) || 0;
@@ -523,20 +308,20 @@
 
         if (!name || price <= 0) return alert("Masukkan data simulasi!");
 
-        const futureVal = price * Math.pow(1 + 0.06, 5); // Simulasi jika uang diinvestasikan 5 tahun (bunga 6%)
-        
+        const futureVal = price * Math.pow(1 + 0.06, 5); 
         res.style.display = "block";
         res.innerHTML = `
-            <div style="background:#fefce8; padding:10px; border-radius:10px; border:1px solid #fef3c7;">
-                <p>📉 <b>Efek Langsung:</b> Saldo kamu akan langsung berkurang menjadi <b>Rp ${(wallet - price).toLocaleString()}</b>.</p>
-                <p style="margin-top:8px;">⏳ <b>Efek Masa Depan:</b> Jika uang Rp ${price.toLocaleString()} ini kamu investasikan, dalam 5 tahun bisa menjadi <b>Rp ${Math.round(futureVal).toLocaleString()}</b>.</p>
-                <p style="margin-top:8px; color:var(--danger)"><b>Keputusan:</b> Apakah ${name} setara dengan kehilangan Rp ${Math.round(futureVal).toLocaleString()} di masa depan?</p>
+            <div style="background:rgba(217, 119, 6, 0.1); padding:10px; border-radius:10px; border:1px solid var(--gold);">
+                <p>📉 <b>Saldo Akhir:</b> Menjadi Rp ${(wallet - price).toLocaleString()}.</p>
+                <p style="margin-top:5px;">⏳ <b>Peluang Hilang:</b> Jika diinvestasikan (6%/thn), uang ini jadi <b>Rp ${Math.round(futureVal).toLocaleString()}</b> dalam 5 thn.</p>
             </div>
         `;
     }
+
+    function toggleDark() {
+        document.body.classList.toggle('dark-mode');
+    }
 </script>
 
-</body>
-</html>
 </body>
 </html>

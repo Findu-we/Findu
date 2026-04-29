@@ -7,6 +7,77 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Authentication Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-container">
+            <div class="auth-card login-card" id="loginCard">
+                <div class="auth-header">
+                    <h2>Login</h2>
+                    <p>Selamat datang kembali di Findu</p>
+                </div>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" placeholder="nama@email.com" required>
+                        <span class="input-icon">✉️</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                        <span class="input-icon">🔒</span>
+                    </div>
+                    <div class="form-remember">
+                        <input type="checkbox" id="remember-me">
+                        <label for="remember-me">Ingat saya</label>
+                    </div>
+                    <button type="submit" class="btn-auth">Masuk</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Belum punya akun? <a href="#" onclick="toggleAuth()">Daftar di sini</a></p>
+                    <a href="#" class="forgot-password">Lupa password?</a>
+                </div>
+            </div>
+
+            <div class="auth-card register-card hidden" id="registerCard">
+                <div class="auth-header">
+                    <h2>Daftar</h2>
+                    <p>Mulai perjalanan finansial Anda sekarang</p>
+                </div>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="register-name">Nama Lengkap</label>
+                        <input type="text" id="register-name" placeholder="Nama Anda" required>
+                        <span class="input-icon">👤</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" placeholder="nama@email.com" required>
+                        <span class="input-icon">✉️</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" placeholder="Minimal 8 karakter" required>
+                        <span class="input-icon">🔒</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm">Konfirmasi Password</label>
+                        <input type="password" id="register-confirm" placeholder="Ulangi password" required>
+                        <span class="input-icon">🔒</span>
+                    </div>
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="agree-terms" required>
+                        <label for="agree-terms">Saya setuju dengan <a href="#">syarat & ketentuan</a></label>
+                    </div>
+                    <button type="submit" class="btn-auth">Daftar</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Sudah punya akun? <a href="#" onclick="toggleAuth()">Login di sini</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="logo">Findu</div>
@@ -15,7 +86,8 @@
                 <li><a href="#features">Fitur</a></li>
                 <li><a href="#education">Edukasi</a></li>
                 <li><a href="#tools">Tools</a></li>
-                <li><a href="#about">Tentang</a></li>
+                <li><a href="#mentor">AI Mentor</a></li>
+                <li><a href="#" onclick="openAuthModal(event)" class="nav-auth">Login/Daftar</a></li>
             </ul>
         </div>
     </nav>
@@ -58,9 +130,9 @@
                     <p>Monitor performa portfolio investasi Anda secara real-time</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">💡</div>
-                    <h3>Tips & Trik</h3>
-                    <p>Dapatkan insight dan tips investasi dari para ahli</p>
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Mentor</h3>
+                    <p>Dapatkan konsultasi finansial dari AI assistant cerdas kami</p>
                 </div>
             </div>
         </div>
@@ -249,6 +321,72 @@
                         <button onclick="calculateROI()">Hitung ROI</button>
                         
                         <div id="result-roi" class="result"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Mentor Section -->
+    <section id="mentor" class="ai-mentor">
+        <div class="container">
+            <h2>🤖 AI Mentor Finansial</h2>
+            <p class="mentor-subtitle">Dapatkan konsultasi finansial dari assistant cerdas kami 24/7</p>
+            
+            <div class="mentor-container">
+                <div class="mentor-chat">
+                    <div class="chat-header">
+                        <div class="mentor-avatar">🤖</div>
+                        <div class="mentor-info">
+                            <h3>Findu AI Mentor</h3>
+                            <p>Online - Siap membantu</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot-message">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-content">
+                                <p>Halo! 👋 Saya Findu AI Mentor. Saya siap membantu Anda dengan pertanyaan tentang keuangan, investasi, dan perencanaan finansial. Apa yang ingin Anda tanyakan?</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-area">
+                        <div class="quick-replies" id="quickReplies">
+                            <button class="quick-reply" onclick="sendMessage('Bagaimana cara memulai investasi saham?')">Mulai investasi saham</button>
+                            <button class="quick-reply" onclick="sendMessage('Apa itu diversifikasi portfolio?')">Diversifikasi portfolio</button>
+                            <button class="quick-reply" onclick="sendMessage('Bagaimana cara membuat budget?')">Membuat budget</button>
+                            <button class="quick-reply" onclick="sendMessage('Tips menghemat uang')">Tips menghemat uang</button>
+                        </div>
+                        
+                        <div class="input-wrapper">
+                            <input type="text" id="mentorInput" placeholder="Ketik pertanyaan Anda..." 
+                                   onkeypress="if(event.key === 'Enter') sendMessage()">
+                            <button onclick="sendMessage()" class="btn-send">Kirim</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mentor-sidebar">
+                    <div class="sidebar-card">
+                        <h4>📚 Topik Populer</h4>
+                        <ul>
+                            <li><a href="#" onclick="sendMessage('Strategi investasi jangka panjang')">Strategi Investasi</a></li>
+                            <li><a href="#" onclick="sendMessage('Cara mengelola risiko investasi')">Manajemen Risiko</a></li>
+                            <li><a href="#" onclick="sendMessage('Investasi untuk pemula')">Investasi Pemula</a></li>
+                            <li><a href="#" onclick="sendMessage('Cryptocurrency untuk pemula')">Cryptocurrency</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-card">
+                        <h4>💡 Fitur AI</h4>
+                        <ul>
+                            <li>✓ Analisis finansial personal</li>
+                            <li>✓ Rekomendasi investasi</li>
+                            <li>✓ Simulasi keuangan</li>
+                            <li>✓ Edukasi interaktif</li>
+                        </ul>
                     </div>
                 </div>
             </div>

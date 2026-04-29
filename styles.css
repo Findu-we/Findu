@@ -17,7 +17,215 @@ body {
     padding: 0 20px;
 }
 
-/* Navbar */
+/* ===== Authentication Styles ===== */
+.auth-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.auth-modal.active {
+    display: flex;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 420px;
+    perspective: 1000px;
+}
+
+.auth-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideInUp 0.4s ease-out;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+.auth-card.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+    color: #667eea;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+    color: #999;
+    font-size: 0.95rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.9rem 2.5rem 0.9rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.form-group input::placeholder {
+    color: #bbb;
+}
+
+.input-icon {
+    position: absolute;
+    right: 1rem;
+    top: 2.5rem;
+    font-size: 1.2rem;
+    pointer-events: none;
+}
+
+.form-remember {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 0.5rem;
+}
+
+.form-remember input[type="checkbox"] {
+    width: auto;
+    padding: 0;
+    cursor: pointer;
+}
+
+.form-remember label {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.form-checkbox {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.form-checkbox input[type="checkbox"] {
+    width: auto;
+    margin-top: 0.3rem;
+    cursor: pointer;
+}
+
+.form-checkbox label {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.form-checkbox a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.form-checkbox a:hover {
+    text-decoration: underline;
+}
+
+.btn-auth {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-auth:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-auth:active {
+    transform: translateY(0);
+}
+
+.auth-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.auth-footer p {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.auth-footer a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.auth-footer a:hover {
+    color: #764ba2;
+}
+
+.forgot-password {
+    display: block;
+    margin-top: 1rem;
+}
+
+/* ===== Navbar Styles ===== */
 .navbar {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -37,25 +245,40 @@ body {
 .logo {
     font-size: 1.8rem;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .nav-menu {
     display: flex;
     list-style: none;
     gap: 2rem;
+    align-items: center;
 }
 
 .nav-menu a {
     color: white;
     text-decoration: none;
     transition: opacity 0.3s;
+    font-weight: 500;
 }
 
 .nav-menu a:hover {
     opacity: 0.8;
 }
 
-/* Hero Section */
+.nav-auth {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    transition: all 0.3s;
+}
+
+.nav-auth:hover {
+    background: rgba(255, 255, 255, 0.3);
+    opacity: 1;
+}
+
+/* ===== Hero Section ===== */
 .hero {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -88,7 +311,7 @@ body {
     background-color: #ff5252;
 }
 
-/* Features Section */
+/* ===== Features Section ===== */
 .features {
     padding: 4rem 0;
     background-color: white;
@@ -132,7 +355,7 @@ body {
     margin-bottom: 1rem;
 }
 
-/* Education Section */
+/* ===== Education Section ===== */
 .education {
     padding: 4rem 0;
     background-color: #f9f9f9;
@@ -216,7 +439,7 @@ body {
     margin-bottom: 0.5rem;
 }
 
-/* Tools Section */
+/* ===== Tools Section ===== */
 .tools {
     padding: 4rem 0;
     background-color: white;
@@ -305,7 +528,225 @@ body {
     color: #667eea;
 }
 
-/* About Section */
+/* ===== AI Mentor Section ===== */
+.ai-mentor {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+.ai-mentor h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.mentor-subtitle {
+    text-align: center;
+    color: #999;
+    margin-bottom: 3rem;
+    font-size: 1.05rem;
+}
+
+.mentor-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.mentor-chat {
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+}
+
+.chat-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mentor-avatar {
+    font-size: 2.5rem;
+}
+
+.mentor-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.mentor-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.message {
+    display: flex;
+    gap: 1rem;
+    animation: slideInMessage 0.3s ease-out;
+}
+
+@keyframes slideInMessage {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-avatar {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.message-content {
+    flex: 1;
+}
+
+.message-content p {
+    margin: 0;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+.bot-message .message-content p {
+    background: #f0f4ff;
+    color: #333;
+    border: 1px solid #e0e8ff;
+}
+
+.user-message {
+    justify-content: flex-end;
+}
+
+.user-message .message-content p {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.chat-input-area {
+    padding: 1.5rem;
+    background: #f9f9f9;
+    border-top: 1px solid #e0e0e0;
+}
+
+.quick-replies {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.quick-reply {
+    padding: 0.6rem;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    color: #667eea;
+}
+
+.quick-reply:hover {
+    background: #f0f4ff;
+    border-color: #667eea;
+}
+
+.input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.input-wrapper input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+}
+
+.btn-send {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-send:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.mentor-sidebar {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-left: 1px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+.sidebar-card {
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-card h4 {
+    color: #667eea;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.sidebar-card ul {
+    list-style: none;
+}
+
+.sidebar-card li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-card a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.sidebar-card a:hover {
+    color: #667eea;
+}
+
+/* ===== About Section ===== */
 .about {
     padding: 4rem 0;
     background-color: #f9f9f9;
@@ -328,7 +769,7 @@ body {
     margin-right: auto;
 }
 
-/* Footer */
+/* ===== Footer ===== */
 footer {
     background-color: #333;
     color: white;
@@ -336,7 +777,7 @@ footer {
     padding: 2rem 0;
 }
 
-/* Responsive Design */
+/* ===== Responsive Design ===== */
 @media (max-width: 768px) {
     .hero h1 {
         font-size: 2rem;
@@ -351,7 +792,7 @@ footer {
         font-size: 0.9rem;
     }
 
-    .features h2, .education h2, .tools h2, .about h2 {
+    .features h2, .education h2, .tools h2, .about h2, .ai-mentor h2 {
         font-size: 1.8rem;
     }
 
@@ -367,5 +808,26 @@ footer {
 
     .features-grid, .tools-grid {
         grid-template-columns: 1fr;
+    }
+
+    .mentor-container {
+        grid-template-columns: 1fr;
+    }
+
+    .mentor-sidebar {
+        border-left: none;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .quick-replies {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-card {
+        padding: 2rem;
+    }
+
+    .auth-container {
+        max-width: 90%;
     }
 }
